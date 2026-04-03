@@ -7,7 +7,7 @@ export default function Home() {
       <div className="absolute inset-0 z-0 h-screen">
         <FloatingLines
           enabledWaves={["top", "middle", "bottom"]}
-          lineCount={5}
+          lineCount={10}
           lineDistance={5}
           bendRadius={5}
           bendStrength={-0.5}

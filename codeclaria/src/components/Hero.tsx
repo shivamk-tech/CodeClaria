@@ -20,12 +20,12 @@ export default function Hero() {
       </div>
 
       <h1
-        className="font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-5"
+        className="font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
         style={{ fontSize: "clamp(28px, 4vw, 56px)" }}
       >
         Explain Any Codebase.
         <br />
-        <span style={{ color: "#a78bfa" }}>Like You Wrote It.</span>
+        <span style={{ color: "#c4b5fd", textShadow: "0 0 40px rgba(167,139,250,0.5)" }}>Like You Wrote It.</span>
       </h1>
 
       <div className="flex items-center gap-3">
