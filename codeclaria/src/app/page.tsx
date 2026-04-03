@@ -1,6 +1,7 @@
 import Hero from '../components/Hero';
 import FloatingLines from '../components/FloatingLines';
 import Features from '../components/Features';
+import BlurryCardsBg from '../components/BlurryCardsBg';
 
 export default function Home() {
   return (
@@ -20,8 +21,10 @@ export default function Home() {
         <div className="relative z-10 -mt-16">
           <Hero />
         </div>
+        {/* fade out bottom of floating lines */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #07061a)" }} />
       </div>
-      <Features />
+      <BlurryCardsBg/>
     </div>
   );
 }
