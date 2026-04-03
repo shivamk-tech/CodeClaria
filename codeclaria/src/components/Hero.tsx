@@ -1,6 +1,7 @@
 "use client";
 
-import {Button} from './ui/Button'
+import {ButtonOutline} from './ui/ButtonOutline'
+import {Button} from './ui/ButtonN'
 
 export default function Hero() {
   return (
@@ -20,27 +21,20 @@ export default function Hero() {
 
       <h1
         className="font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-5"
-        style={{ fontSize: "clamp(40px, 6vw, 80px)" }}
+        style={{ fontSize: "clamp(28px, 4vw, 56px)" }}
       >
         Explain Any Codebase.
         <br />
         <span style={{ color: "#a78bfa" }}>Like You Wrote It.</span>
       </h1>
 
-      <p
-        className="text-[18px] font-normal max-w-[520px] mb-8"
-        style={{ color: "rgba(255,255,255,0.45)" }}
-      >
-        Paste a GitHub repo URL and get a plain-English breakdown of every file, dependency, and issue — instantly.
-      </p>
-
       <div className="flex items-center gap-3">
-        <Button className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg">
+        <Button className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg cursor-pointer">
             Analyze a repo
         </Button>
-        <Button variant className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg">
-            Analyze a repo
-        </Button>
+        <ButtonOutline className="text-[14px] font-medium px-6 py-3 rounded-lg border-white/20 bg-transparent text-white/65 hover:bg-white/5 hover:text-white cursor-pointer">
+            See how it works
+        </ButtonOutline>
       </div>
     </div>
   );

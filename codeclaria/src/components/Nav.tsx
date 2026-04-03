@@ -39,12 +39,13 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <div className="flex items-center gap-2 text-[13px] font-light tracking-[0.1em] text-[#e8e2d5]/80 cursor-pointer">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-          <circle cx="12" cy="8" r="4" />
-          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-        </svg>
-        Account
+      <div className="flex items-center gap-3">
+        <button className="text-sm font-medium bg-transparent border border-white/20 rounded-lg px-4 py-2 cursor-pointer text-white/70 hover:text-white hover:border-white/40 transition-all">
+          Sign up
+        </button>
+        <button className="text-sm font-medium bg-white text-[#07061a] rounded-lg px-4 py-2 cursor-pointer hover:bg-white/90 transition-all">
+          Connect GitHub
+        </button>
       </div>
     </nav>
   )

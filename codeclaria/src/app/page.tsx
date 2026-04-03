@@ -3,8 +3,8 @@ import FloatingLines from '../components/FloatingLines';
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen flex items-center justify-center -mt-16">
-      <div className="absolute inset-0 z-0">
+    <div className="relative h-screen flex items-center justify-center">
+      <div className="absolute inset-0 z-0 h-screen">
         <FloatingLines
           enabledWaves={["top", "middle", "bottom"]}
           lineCount={5}
@@ -15,7 +15,7 @@ export default function Home() {
           parallax={true}
         />
       </div>
-      <div className="relative z-10">
+      <div className="relative z-10 ">
         <Hero />
       </div>
     </div>
