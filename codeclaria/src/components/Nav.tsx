@@ -1,6 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
+import { DM_Sans } from 'next/font/google'
+
+const dmSans = DM_Sans({ subsets: ['latin'] })
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
@@ -13,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed z-[9999] flex items-center justify-between transition-all duration-400
+      className={`${dmSans.className} fixed z-[9999] flex items-center justify-between transition-all duration-400
         ${scrolled
           ? "top-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[1600px] rounded-full bg-[rgba(10,21,32,0.7)] backdrop-blur-md border border-white/10 px-10 py-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
           : "top-0 left-0 right-0 w-full bg-transparent px-14 py-7"
@@ -28,7 +31,7 @@ const Navbar = () => {
           <li key={item}>
             <a
               href="#"
-              className="text-white/80 hover:text-white no-underline font-light tracking-[0.12em] text-xs md:text-[12px] transition-opacity duration-300"
+              className="text-white hover:text-white no-underline font-light tracking-[0.12em] text-xs md:text-[12px] transition-opacity duration-300"
             >
               {item}
             </a>
