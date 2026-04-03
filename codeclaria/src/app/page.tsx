@@ -3,7 +3,7 @@ import FloatingLines from '../components/FloatingLines';
 import BlurryCardsBg from '../components/BlurryCardsBg';
 import HowItWorks from '../components/HowItWorks';
 import ConnectGithub from '../components/ConnectGithub';
-
+import Footer from '@/components/ui/Footer';
 
 export default function Home() {
   return (
@@ -32,7 +32,8 @@ export default function Home() {
       <HowItWorks />
       <div className="h-24" style={{ background: "linear-gradient(to bottom, #0d0b1f, #07061a)" }} />
       <ConnectGithub />
-      
+      <div className="h-32" style={{ background: "linear-gradient(to bottom, #07061a, #0a0f1e)" }} />
+      <Footer/>
     </div>
   );
 }
