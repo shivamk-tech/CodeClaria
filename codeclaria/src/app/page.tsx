@@ -1,7 +1,9 @@
 import Hero from '../components/Hero';
 import FloatingLines from '../components/FloatingLines';
-import Features from '../components/Features';
 import BlurryCardsBg from '../components/BlurryCardsBg';
+import HowItWorks from '../components/HowItWorks';
+import ConnectGithub from '../components/ConnectGithub';
+
 
 export default function Home() {
   return (
@@ -25,6 +27,12 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #07061a)" }} />
       </div>
       <BlurryCardsBg/>
+      {/* fade between sections */}
+      <div className="h-24" style={{ background: "linear-gradient(to bottom, #07061a, #0d0b1f)" }} />
+      <HowItWorks />
+      <div className="h-24" style={{ background: "linear-gradient(to bottom, #0d0b1f, #07061a)" }} />
+      <ConnectGithub />
+      
     </div>
   );
 }

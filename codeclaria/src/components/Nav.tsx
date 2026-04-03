@@ -18,8 +18,8 @@ const Navbar = () => {
     <nav
       className={`${dmSans.className} fixed z-[9999] flex items-center justify-between transition-all duration-400
         ${scrolled
-          ? "top-5 left-1/2 -translate-x-1/2 w-[75%] max-w-[1600px] rounded-full bg-[rgba(10,21,32,0.7)] backdrop-blur-md border border-white/10 px-10 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          : "top-0 left-1/2 -translate-x-1/2 w-[85%] bg-transparent px-14 py-4"
+          ? "top-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[1600px] rounded-full bg-[rgba(10,21,32,0.7)] backdrop-blur-md border border-white/10 px-10 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          : "top-0 left-1/2 -translate-x-1/2 w-[95%] bg-transparent px-14 py-4"
         }`}
     >
       <a href="#" className="text-[#e8e2d5] no-underline font-light text-lg tracking-[0.25em]">
