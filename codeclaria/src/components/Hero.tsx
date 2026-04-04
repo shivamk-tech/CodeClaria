@@ -2,8 +2,12 @@
 
 import {ButtonOutline} from './ui/ButtonOutline'
 import {Button} from './ui/ButtonN'
+import { useRouter } from 'next/navigation';
 
 export default function Hero() {
+
+  const router = useRouter()
+
   return (
     <div className="flex flex-col items-center justify-center text-center px-6">
       <div
@@ -29,7 +33,7 @@ export default function Hero() {
       </h1>
 
       <div className="flex items-center gap-3">
-        <Button className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg cursor-pointer">
+        <Button onClick={()=>{router.push('/analyze')}} className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg cursor-pointer">
             Analyze a repo
         </Button>
         <ButtonOutline className="text-[14px] font-medium px-6 py-3 rounded-lg border-white/20 bg-transparent text-white/65 hover:bg-white/5 hover:text-white cursor-pointer">
