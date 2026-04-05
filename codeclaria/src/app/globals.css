@@ -131,6 +131,10 @@ html::-webkit-scrollbar {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    cursor: pointer;
+  }
+  button, a {
+    cursor: pointer;
   }
   body {
     @apply text-foreground;

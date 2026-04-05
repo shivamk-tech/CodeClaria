@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface Step {
   number: string;
@@ -179,7 +180,15 @@ const steps: Step[] = [
 
 export default function HowItWorks() {
   const [active, setActive] = useState(0);
+  const [repoUrl, setRepoUrl] = useState("");
+  const { data: session } = useSession();
   const s = steps[active];
+
+  const handleAnalyze = () => {
+    if (!repoUrl.trim()) return;
+    const url = repoUrl.startsWith("http") ? repoUrl : `https://github.com/${repoUrl}`;
+    window.location.href = `/analyze?url=${encodeURIComponent(url)}`;
+  };
 
   return (
     <div className="relative mx-6 lg:mx-20 my-10">
@@ -267,10 +276,11 @@ export default function HowItWorks() {
           <p className="text-sm text-white/40 mt-0.5">Paste a repo URL and get full clarity in under 90 seconds.</p>
         </div>
         <button className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#07061a] rounded-lg text-sm font-medium hover:bg-white/90 transition-colors">
-          Get started free
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
+          {session ? (
+            <a href="/analyze">Analyze a repo →</a>
+          ) : (
+            <a href="/login">Get started free →</a>
+          )}
         </button>
       </div>
 
@@ -283,11 +293,18 @@ export default function HowItWorks() {
           </svg>
           <input
             type="text"
+            value={repoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
             placeholder="https://github.com/your-org/your-repo"
             className="flex-1 bg-transparent text-sm text-white/60 placeholder:text-white/25 outline-none font-mono"
           />
         </div>
-        <button className="shrink-0 text-sm font-semibold bg-white text-[#07061a] px-5 py-2.5 rounded-lg hover:bg-white/90 transition-colors">
+        <button
+          onClick={handleAnalyze}
+          disabled={!repoUrl.trim()}
+          className="shrink-0 text-sm font-semibold bg-white text-[#07061a] px-5 py-2.5 rounded-lg hover:bg-white/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
           Analyze Repo →
         </button>
       </div>

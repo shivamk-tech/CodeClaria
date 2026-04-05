@@ -44,7 +44,7 @@ export default function ConnectGithub() {
           style={{ background: "#24292e" }}
         >
           <GitHubIcon />
-          Continue with GitHub
+        Connect with GitHub
         </button>
 
         <p className="text-[12px] mt-6" style={{ color: "rgba(255,255,255,0.2)" }}>

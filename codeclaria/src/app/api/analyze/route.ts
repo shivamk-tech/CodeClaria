@@ -1,65 +1,170 @@
 import { NextRequest, NextResponse } from "next/server"
+import { analyzeCode } from "@/lib/gemini";
+
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN
+
+const githubHeaders: HeadersInit = {
+  Accept: "application/vnd.github+json",
+  ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+}
+
+// dirs to always skip
+const SKIP_DIRS = new Set([
+  "node_modules", ".git", "dist", "build", ".next", "out", "coverage",
+  ".turbo", ".cache", "vendor", "__pycache__", ".venv", "venv",
+  "public", "static", "assets", "images", "fonts", "icons",
+])
+
+// priority files — always grab these if they exist
+const PRIORITY_FILES = [
+  "package.json", "tsconfig.json", "next.config.ts", "next.config.js",
+  "vite.config.ts", "vite.config.js", "tailwind.config.ts", "tailwind.config.js",
+  "prisma/schema.prisma", "README.md",
+]
+
+// important dirs to prioritize
+const PRIORITY_DIRS = ["src", "app", "pages", "lib", "utils", "hooks", "components", "api", "server", "routes", "controllers", "models", "services"]
 
 function parseRepo(url: string) {
-  const clean = url.replace("https://github.com/", "")
+  const clean = url.replace("https://github.com/", "").replace(/\/+$/, "")
   const [owner, repo] = clean.split("/")
   return { owner, repo }
 }
 
-// recursive fetch
-async function getRepoFiles(owner: string, repo: string, path = "") {
+async function fetchContents(owner: string, repo: string, path = ""): Promise<any[]> {
   const res = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
-  );
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    { headers: githubHeaders }
+  )
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.message || "GitHub API error")
+  }
+  const data = await res.json()
+  return Array.isArray(data) ? data : []
+}
 
-  const data = await res.json();
+async function fetchFileContent(downloadUrl: string): Promise<string> {
+  const res = await fetch(downloadUrl, { headers: githubHeaders })
+  const text = await res.text()
+  // truncate large files to 3000 chars
+  return text.slice(0, 3000)
+}
 
-  let files: any[] = [];
+function isCodeFile(name: string): boolean {
+  return /\.(js|ts|jsx|tsx|py|java|cpp|c|go|rb|rs|php|cs|swift|kt|vue|svelte|prisma|graphql|sql|env\.example|yaml|yml|json|md)$/.test(name)
+}
 
-  for (const item of data) {
-    if (item.type === "file") {
-      // filter only useful files
-      if (!item.name.match(/\.(js|ts|jsx|tsx|py|java|cpp|c|go)$/)) continue;
+function scoreFile(path: string): number {
+  let score = 0
+  // root level files are most important
+  if (!path.includes("/")) score += 10
+  // priority dirs
+  for (const dir of PRIORITY_DIRS) {
+    if (path.startsWith(dir + "/") || path.includes("/" + dir + "/")) score += 5
+  }
+  // entry points
+  if (/index\.(ts|tsx|js|jsx)$/.test(path)) score += 8
+  if (/main\.(ts|tsx|js|jsx|py|go)$/.test(path)) score += 8
+  if (/app\.(ts|tsx|js|jsx)$/.test(path)) score += 7
+  if (/layout\.(ts|tsx|js|jsx)$/.test(path)) score += 6
+  if (/page\.(ts|tsx|js|jsx)$/.test(path)) score += 5
+  if (/route\.(ts|tsx|js|jsx)$/.test(path)) score += 5
+  // config files
+  if (/\.(config|setup|init)\.(ts|js)$/.test(path)) score += 4
+  // model/schema files
+  if (/\.(model|schema|entity)\.(ts|js)$/.test(path)) score += 4
+  if (/schema\.prisma$/.test(path)) score += 9
+  // auth files
+  if (/auth\.(ts|js)$/.test(path)) score += 6
+  // README
+  if (/readme\.md$/i.test(path)) score += 7
+  // package.json
+  if (/package\.json$/.test(path)) score += 9
+  return score
+}
 
-      const fileRes = await fetch(item.download_url);
-      const content = await fileRes.text();
+async function collectFiles(owner: string, repo: string, path = "", depth = 0, allFiles: any[] = []): Promise<any[]> {
+  if (depth > 4) return allFiles
 
-      files.push({
-        name: item.name,
-        path: item.path,
-        content,
-      });
-    }
+  const items = await fetchContents(owner, repo, path)
 
-    if (item.type === "dir") {
-      // skip heavy folders
-      if (["node_modules", ".git", "dist", "build"].includes(item.name)) continue;
+  // sort: priority dirs first, then files
+  const dirs = items.filter(i => i.type === "dir" && !SKIP_DIRS.has(i.name))
+  const files = items.filter(i => i.type === "file" && isCodeFile(i.name))
 
-      const nested = await getRepoFiles(owner, repo, item.path);
-      files = files.concat(nested);
-    }
+  // add files with scores
+  for (const file of files) {
+    allFiles.push({ ...file, score: scoreFile(file.path) })
   }
 
-  return files;
+  // recurse into dirs — priority dirs first
+  const sortedDirs = dirs.sort((a, b) => {
+    const aP = PRIORITY_DIRS.includes(a.name) ? 1 : 0
+    const bP = PRIORITY_DIRS.includes(b.name) ? 1 : 0
+    return bP - aP
+  })
+
+  for (const dir of sortedDirs) {
+    if (allFiles.length > 200) break // stop collecting after 200 file refs
+    await collectFiles(owner, repo, dir.path, depth + 1, allFiles)
+  }
+
+  return allFiles
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { url } = await req.json();
+    const { url } = await req.json()
+    const { owner, repo } = parseRepo(url)
 
-    const { owner, repo } = parseRepo(url);
+    // collect all file references
+    const allFiles = await collectFiles(owner, repo)
 
-    const files = await getRepoFiles(owner, repo);
+    // sort by score and take top 25
+    const topFiles = allFiles
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 25)
+
+    // fetch content for top files in parallel
+    const filesWithContent = await Promise.all(
+      topFiles.map(async (file) => {
+        try {
+          const content = await fetchFileContent(file.download_url)
+          return { path: file.path, content }
+        } catch {
+          return null
+        }
+      })
+    )
+
+    const validFiles = filesWithContent.filter(Boolean)
+
+    // build combined code string capped at 14000 chars
+    const combinedCode = validFiles
+      .map((f) => `// File: ${f!.path}\n${f!.content}`)
+      .join("\n\n---\n\n")
+      .slice(0, 14000)
+
+    let aiResult = ""
+    try {
+      aiResult = await analyzeCode(combinedCode)
+    } catch (e) {
+      console.error("AI error:", e)
+      aiResult = "AI failed to respond"
+    }
 
     return NextResponse.json({
       success: true,
-      totalFiles: files.length,
-      files,
-    });
-  } catch (error) {
+      totalFiles: allFiles.length,
+      analyzedFiles: validFiles.length,
+      result: aiResult,
+    })
+  } catch (error: any) {
+    console.error("Analyze error:", error)
     return NextResponse.json({
       success: false,
-      error: "Something went wrong",
-    });
+      error: error?.message || "Something went wrong",
+    })
   }
 }

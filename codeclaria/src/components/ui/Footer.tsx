@@ -1,4 +1,8 @@
+"use client";
+import { useSession } from "next-auth/react";
+
 export default function Footer() {
+  const { data: session } = useSession();
   return (
     <footer
       className="relative w-full overflow-hidden"
@@ -33,12 +37,15 @@ export default function Footer() {
         </h2>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <button
-            className="text-[14px] font-semibold rounded-xl px-6 py-3 transition-all hover:opacity-90"
-            style={{ background: "#e2e8f0", color: "#0a0f1e" }}
-          >
-            Get started free
-          </button>
+          {!session && (
+            <a
+              href="/login"
+              className="text-[14px] font-semibold rounded-xl px-6 py-3 transition-all hover:opacity-90"
+              style={{ background: "#e2e8f0", color: "#0a0f1e" }}
+            >
+              Get started free
+            </a>
+          )}
           <button
             className="text-[14px] font-medium rounded-xl px-6 py-3 transition-all hover:bg-white/5"
             style={{ border: "1px solid rgba(148,163,184,0.15)", color: "rgba(148,163,184,0.6)" }}

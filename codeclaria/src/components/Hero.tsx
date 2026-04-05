@@ -36,7 +36,9 @@ export default function Hero() {
         <Button onClick={()=>{router.push('/analyze')}} className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg cursor-pointer">
             Analyze a repo
         </Button>
-        <ButtonOutline className="text-[14px] font-medium px-6 py-3 rounded-lg border-white/20 bg-transparent text-white/65 hover:bg-white/5 hover:text-white cursor-pointer">
+        <ButtonOutline
+          onClick={() => document.querySelector('#how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+          className="text-[14px] font-medium px-6 py-3 rounded-lg border-white/20 bg-transparent text-white/65 hover:bg-white/5 hover:text-white cursor-pointer">
             See how it works
         </ButtonOutline>
       </div>

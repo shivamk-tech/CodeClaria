@@ -8,7 +8,12 @@ const authOption: NextAuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-    }),
+      authorization: {
+        params: {
+          scope: "read:user repo",
+        },
+      },
+    })
   ],
 
   callbacks: {
@@ -46,6 +51,7 @@ const authOption: NextAuthOptions = {
         token.name = profile.name || profile.login
         token.email = profile.email
         token.image = profile.avatar_url
+        token.accessToken = account.access_token
       }
 
       return token
@@ -57,6 +63,7 @@ const authOption: NextAuthOptions = {
         session.user.name = token.name
         session.user.email = token.email
         session.user.image = token.image as string
+        session.accessToken = token.accessToken as string
       }
 
       return session
