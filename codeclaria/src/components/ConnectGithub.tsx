@@ -1,5 +1,6 @@
 "use client";
 import Image from 'next/image';
+import { useSession, signIn } from 'next-auth/react';
 
 function GitHubIcon() {
   return (
@@ -10,6 +11,8 @@ function GitHubIcon() {
 }
 
 export default function ConnectGithub() {
+  const { data: session, status } = useSession();
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
@@ -27,32 +30,82 @@ export default function ConnectGithub() {
           <Image src="/icon.svg" alt="logo" width={36} height={36} />
         </div>
 
-        <h1
-          className="font-extrabold text-white tracking-[-0.03em] leading-[1.05] mb-4"
-          style={{ fontSize: "clamp(28px, 4vw, 44px)" }}
-        >
-          Connect your GitHub.<br />
-          <span className="text-white">Understand everything.</span>
-        </h1>
+        {status === "loading" ? (
+          <div className="w-6 h-6 rounded-full border-2 border-white/20 border-t-white animate-spin mb-10" />
+        ) : session ? (
+          // logged in
+          <>
+            <div className="flex items-center gap-3 mb-4">
+              {session.user?.image && (
+                <img src={session.user.image} alt="avatar" className="w-10 h-10 rounded-full border border-white/10" />
+              )}
+              <div className="text-left">
+                <p className="text-white font-semibold text-[15px]">{session.user?.name}</p>
+                <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.4)" }}>{session.user?.email}</p>
+              </div>
+            </div>
 
-        <p className="text-[15px] mb-10" style={{ color: "rgba(255,255,255,0.4)" }}>
-          Sign in with GitHub to start analyzing your repos. No setup, no config.
-        </p>
+            <div className="flex items-center gap-2 mb-8">
+              <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }}>
+                ● GitHub Connected
+              </span>
+            </div>
 
-        <button
-          className="w-full flex items-center justify-center gap-3 text-[16px] font-semibold rounded-xl px-8 py-5 cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] text-white"
-          style={{ background: "#24292e" }}
-        >
-          <GitHubIcon />
-        Connect with GitHub
-        </button>
+            <h1 className="font-extrabold text-white tracking-[-0.03em] leading-[1.05] mb-4" style={{ fontSize: "clamp(24px, 4vw, 38px)" }}>
+              You're all set.<br />
+              <span style={{ color: "#a78bfa" }}>Start analyzing.</span>
+            </h1>
 
-        <p className="text-[12px] mt-6" style={{ color: "rgba(255,255,255,0.2)" }}>
-          By continuing, you agree to our{" "}
-          <span className="underline cursor-pointer">Terms</span>{" "}
-          and{" "}
-          <span className="underline cursor-pointer">Privacy Policy</span>.
-        </p>
+            <p className="text-[14px] mb-8" style={{ color: "rgba(255,255,255,0.4)" }}>
+              Your GitHub is connected. Pick a repo and get the full picture.
+            </p>
+
+            <div className="flex flex-col gap-3 w-full">
+              <a
+                href="/dashboard"
+                className="w-full flex items-center justify-center gap-2 text-[15px] font-semibold rounded-xl px-8 py-4 transition-all hover:bg-white/90"
+                style={{ background: "#fff", color: "#07061a" }}
+              >
+                Go to Dashboard →
+              </a>
+              <a
+                href="/analyze"
+                className="w-full flex items-center justify-center gap-2 text-[14px] font-medium rounded-xl px-8 py-3 transition-all hover:bg-white/5"
+                style={{ border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}
+              >
+                Analyze a repo by URL
+              </a>
+            </div>
+          </>
+        ) : (
+          // not logged in
+          <>
+            <h1 className="font-extrabold text-white tracking-[-0.03em] leading-[1.05] mb-4" style={{ fontSize: "clamp(28px, 4vw, 44px)" }}>
+              Connect your GitHub.<br />
+              <span style={{ color: "#a78bfa" }}>Understand everything.</span>
+            </h1>
+
+            <p className="text-[15px] mb-8" style={{ color: "rgba(255,255,255,0.4)" }}>
+              Sign in with GitHub to start analyzing your repos. No setup, no config.
+            </p>
+
+            <button
+              onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+              className="w-full flex items-center justify-center gap-3 text-[16px] font-semibold rounded-xl px-8 py-5 transition-all hover:opacity-90 active:scale-[0.98] text-white"
+              style={{ background: "#24292e" }}
+            >
+              <GitHubIcon />
+              Continue with GitHub
+            </button>
+
+            <p className="text-[12px] mt-6" style={{ color: "rgba(255,255,255,0.2)" }}>
+              By continuing, you agree to our{" "}
+              <span className="underline">Terms</span>{" "}
+              and{" "}
+              <span className="underline">Privacy Policy</span>.
+            </p>
+          </>
+        )}
 
       </div>
     </div>

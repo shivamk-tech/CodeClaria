@@ -52,7 +52,7 @@ async function fetchFileContent(downloadUrl: string): Promise<string> {
 }
 
 function isCodeFile(name: string): boolean {
-  return /\.(js|ts|jsx|tsx|py|java|cpp|c|go|rb|rs|php|cs|swift|kt|vue|svelte|prisma|graphql|sql|env\.example|yaml|yml|json|md)$/.test(name)
+  return /\.(js|ts|jsx|tsx|py|java|cpp|c|go|rb|rs|php|cs|swift|kt|vue|svelte|prisma|graphql|sql|env\.example|yaml|yml|json|md|css|scss|sass|less|html)$/.test(name)
 }
 
 function scoreFile(path: string): number {
@@ -81,6 +81,12 @@ function scoreFile(path: string): number {
   if (/readme\.md$/i.test(path)) score += 7
   // package.json
   if (/package\.json$/.test(path)) score += 9
+  // css/styles
+  if (/globals\.(css|scss|sass)$/.test(path)) score += 6
+  if (/\.(css|scss|sass|less)$/.test(path) && !path.includes("node_modules")) score += 3
+  // json configs
+  if (/tsconfig\.json$/.test(path)) score += 7
+  if (/\.json$/.test(path) && !path.includes("node_modules")) score += 2
   return score
 }
 
@@ -146,6 +152,25 @@ export async function POST(req: NextRequest) {
       .join("\n\n---\n\n")
       .slice(0, 14000)
 
+    // build dependency map from imports
+    const deps: Record<string, string[]> = {}
+    for (const f of validFiles) {
+      if (!f) continue
+      const imports: string[] = []
+      const lines = f.content.split("\n")
+      for (const line of lines) {
+        const match = line.match(/(?:import|require).*?['"]([^'"]+)['"]/)
+        if (match) {
+          const imp = match[1]
+          // only local imports
+          if (imp.startsWith(".") || imp.startsWith("@/") || imp.startsWith("~/")) {
+            imports.push(imp)
+          }
+        }
+      }
+      deps[f.path] = imports
+    }
+
     let aiResult = ""
     try {
       aiResult = await analyzeCode(combinedCode)
@@ -159,6 +184,8 @@ export async function POST(req: NextRequest) {
       totalFiles: allFiles.length,
       analyzedFiles: validFiles.length,
       result: aiResult,
+      dependencies: deps,
+      files: validFiles.map(f => f?.path),
     })
   } catch (error: any) {
     console.error("Analyze error:", error)
