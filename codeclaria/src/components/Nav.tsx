@@ -56,7 +56,7 @@ const Navbar = () => {
             <li key={item.label}>
               <button
                 onClick={() => scrollTo(item.href)}
-                className="text-white no-underline font-light tracking-[0.12em] text-xs transition-opacity duration-300 hover:opacity-70 bg-transparent border-none"
+                className="text-white no-underline font-light tracking-[0.12em] text-xs transition-opacity duration-300 hover:opacity-70 bg-transparent border-none cursor-pointer"
               >
                 {item.label}
               </button>
@@ -71,16 +71,16 @@ const Navbar = () => {
           ) : session ? (
             // logged in
             <>
-              <a href="/analyze" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2">
+              <a href="/analyze" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2 cursor-pointer">
                 Analyze
               </a>
-              <a href="/dashboard" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2">
+              <a href="/dashboard" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2 cursor-pointer">
                 Dashboard
               </a>
-              <div className="flex items-center gap-2 pl-3" style={{ borderLeft: "1px solid rgba(255,255,255,0.1)" }}>
+              <div className="flex items-center gap-2 pl-3 cursor-pointer" style={{ borderLeft: "1px solid rgba(255,255,255,0.1)" }}>
                 {session.user?.image && (
                   <a href="/profile">
-                    <img src={session.user.image} alt="avatar" className="w-7 h-7 rounded-full border border-white/10 hover:border-white/30 transition-all" />
+                    <img src={session.user.image} alt="avatar" className="w-7 h-7 cursor-pointer rounded-full border border-white/10 hover:border-white/30 transition-all" />
                   </a>
                 )}
                 <a href="/profile" className="text-[13px] text-white/60 hover:text-white transition-colors">{session.user?.name?.split(" ")[0]}</a>

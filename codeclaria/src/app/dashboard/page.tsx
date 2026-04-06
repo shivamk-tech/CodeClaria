@@ -82,7 +82,7 @@ export default function DashboardPage() {
           </div>
           <a
             href="/analyze"
-            className="text-[13px] font-medium px-4 py-2 rounded-lg transition-all hover:bg-white/90"
+            className="text-[13px] font-medium px-4 py-2 rounded-lg transition-all hover:bg-white/90 cursor-pointer"
             style={{ background: "#fff", color: "#07061a" }}
           >
             Analyze by URL →
@@ -141,7 +141,7 @@ export default function DashboardPage() {
                   </div>
                   <button
                     onClick={() => router.push(`/analyze?url=https://github.com/${repo.full_name}`)}
-                    className="text-[11px] font-medium px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all"
+                    className="text-[11px] font-medium px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                     style={{ background: "#fff", color: "#07061a" }}
                   >
                     Analyze
