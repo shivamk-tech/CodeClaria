@@ -25,17 +25,21 @@ const authOption: NextAuthOptions = {
         const email = profile?.email
         const name = profile?.name || profile?.login
         const image = profile?.avatar_url
+        const accessToken = account.access_token
 
         let existUser = await User.findOne({ githubId })
 
-        // create user if not exists
         if (!existUser) {
           existUser = await User.create({
             githubId,
             name,
             email,
             image,
+            accessToken,
           })
+        } else {
+          // update accessToken on every login in case it changed
+          await User.updateOne({ githubId }, { accessToken })
         }
 
         return true

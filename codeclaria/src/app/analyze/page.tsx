@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Nav from "@/components/Nav";
 import DependencyGraph from "@/components/DependencyGraph";
+import ChatWithRepo from "@/components/ChatWithRepo";
 
 function AnalyzeContent() {
     const searchParams = useSearchParams();
@@ -12,6 +13,7 @@ function AnalyzeContent() {
     const [result, setResult] = useState("");
     const [parsed, setParsed] = useState<any>(null);
     const [deps, setDeps] = useState<{ files: string[], dependencies: Record<string, string[]> } | null>(null);
+    const [filesContent, setFilesContent] = useState<Record<string, string>>({});
 
     const handleAnalyze = async (analyzeUrl?: string) => {
         const target = (analyzeUrl || url).trim();
@@ -29,6 +31,10 @@ function AnalyzeContent() {
             const data = await res.json();
             setResult(data.result);
             setDeps({ files: data.files || [], dependencies: data.dependencies || {} });
+            setFilesContent(data.filesContent || {});
+            console.log(`📁 Total files found: ${data.totalFiles}`);
+            console.log(`📊 Files analyzed: ${data.analyzedFiles}`);
+            console.log("📂 File contents:", data.filesContent);
             try {
                 const jsonMatch = data.result.match(/\{[\s\S]*\}/);
                 if (jsonMatch) setParsed(JSON.parse(jsonMatch[0]));
@@ -130,6 +136,12 @@ function AnalyzeContent() {
                             <DependencyGraph files={deps.files} dependencies={deps.dependencies} />
                         </div>
                     )}
+
+                    {/* chat with repo */}
+                    <div className="mb-8">
+                        <h2 className="text-[11px] uppercase tracking-[0.12em] mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Chat with Repo</h2>
+                        <ChatWithRepo repoUrl={url} filesContent={filesContent} />
+                    </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 

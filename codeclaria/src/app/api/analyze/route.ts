@@ -186,6 +186,7 @@ export async function POST(req: NextRequest) {
       result: aiResult,
       dependencies: deps,
       files: validFiles.map(f => f?.path),
+      filesContent: Object.fromEntries(validFiles.map(f => [f!.path, f!.content])),
     })
   } catch (error: any) {
     console.error("Analyze error:", error)

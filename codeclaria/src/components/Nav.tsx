@@ -5,8 +5,6 @@ import { DM_Sans } from 'next/font/google'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 
-
-
 const dmSans = DM_Sans({ subsets: ['latin'] })
 
 const NAV_ITEMS = [
