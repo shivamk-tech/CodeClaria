@@ -3,6 +3,7 @@ import crypto from "crypto";
 import connectDb from "@/lib/db";
 import ConnectRepo from "@/model/connectRepo.model";
 import { triggerPRReview } from "@/services/prReviewService";
+import { triggerCommitReview } from "@/services/commitReviewService";
 
 function verifySignature(payload: Buffer, signature: string): boolean {
   const secret = process.env.GITHUB_APP_WEBHOOK_SECRET;
@@ -32,6 +33,9 @@ export async function POST(req: NextRequest) {
 
     if (!verifySignature(rawBody, signature)) {
       console.error("❌ Invalid webhook signature");
+      console.error("   Event:", event);
+      console.error("   Signature received:", signature?.slice(0, 20) + "...");
+      console.error("   Secret set:", !!process.env.GITHUB_APP_WEBHOOK_SECRET);
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -63,6 +67,19 @@ export async function POST(req: NextRequest) {
         const installationId = payload.installation.id.toString();
         await ConnectRepo.updateMany({ installationId }, { isActive: false });
         console.log(`❌ App uninstalled — installation ${installationId} deactivated`);
+      }
+    }
+
+    // push event — review commits pushed to main
+    if (event === "push") {
+      const { commits, ref, installation } = payload;
+      if (!installation) {
+        console.log("⏭️  Push event has no installation — skipping");
+      } else if (!commits || commits.length === 0) {
+        console.log("⏭️  Push event has no commits — skipping");
+      } else {
+        console.log(`\n📤 Push to ${ref} — ${commits.length} commit(s)`);
+        triggerCommitReview({ commits, repository: payload.repository, installation, ref });
       }
     }
 
