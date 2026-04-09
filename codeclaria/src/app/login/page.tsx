@@ -1,6 +1,8 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Image from "next/image";
 
 function GitHubIcon() {
@@ -12,6 +14,15 @@ function GitHubIcon() {
 }
 
 export default function LoginPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/dashboard");
+  }, [status, router]);
+
+  if (status === "loading" || status === "authenticated") return null;
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"

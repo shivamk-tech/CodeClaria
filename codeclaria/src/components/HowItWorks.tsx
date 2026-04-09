@@ -275,12 +275,9 @@ export default function HowItWorks() {
           <p className="font-medium text-base text-white">Ready to simplify your codebase?</p>
           <p className="text-sm text-white/40 mt-0.5">Paste a repo URL and get full clarity in under 90 seconds.</p>
         </div>
-        <button className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#07061a] rounded-lg text-sm font-medium hover:bg-white/90 transition-colors">
-          {session ? (
-            <a href="/analyze">Analyze a repo →</a>
-          ) : (
-            <a href="/login">Get started free →</a>
-          )}
+        <button className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#07061a] rounded-lg text-sm font-medium hover:bg-white/90 transition-colors"
+          onClick={() => window.location.href = session ? "/analyze" : "/login"}>
+          {session ? "Analyze a repo →" : "Get started free →"}
         </button>
       </div>
 

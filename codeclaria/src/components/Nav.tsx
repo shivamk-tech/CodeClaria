@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { DM_Sans } from 'next/font/google'
 import { useSession, signOut } from 'next-auth/react'
-import Image from 'next/image'
+import { useRouter, usePathname } from 'next/navigation'
 
 const dmSans = DM_Sans({ subsets: ['latin'] })
 
@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { label: "Features",     href: "#features" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Pricing",      href: null },
-  { label: "Docs",         href: null },
+  { label: "Docs",         href: "/docs" },
 ]
 
 const Navbar = () => {
@@ -20,14 +20,25 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const { data: session, status } = useSession()
 
+  const router = useRouter()
+  const pathname = usePathname()
+
+  // on /docs show solid full-width navbar, not floating pill
+  const isDocs = pathname === '/docs'
+  const isFloating = scrolled && !isDocs
+
   const scrollTo = (href: string | null) => {
     if (!href) return;
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.location.href = "/" + href;
+    if (href.startsWith('/')) {
+      router.push(href);
+      return;
     }
+    if (pathname !== '/') {
+      router.push('/' + href);
+      return;
+    }
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   }
 
   useEffect(() => {
@@ -40,7 +51,9 @@ const Navbar = () => {
     <>
       <nav
         className={`${dmSans.className} fixed z-[9999] flex items-center justify-between transition-all duration-400
-          ${scrolled
+          ${isDocs
+            ? "top-0 left-0 right-0 w-full bg-[rgba(7,6,26,0.85)] backdrop-blur-md border-b border-white/10 px-6 md:px-14 py-5"
+            : isFloating
             ? "top-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[1600px] rounded-full bg-[rgba(10,21,32,0.7)] backdrop-blur-md border border-white/10 px-6 md:px-10 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
             : "top-0 left-1/2 -translate-x-1/2 w-[95%] bg-transparent px-4 md:px-14 py-4"
           }`}
@@ -66,9 +79,7 @@ const Navbar = () => {
 
         {/* desktop right side */}
         <div className="hidden md:flex items-center gap-3">
-          {status === "loading" ? (
-            <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-          ) : session ? (
+          {status === "loading" ? null : session ? (
             // logged in
             <>
               <a href="/analyze" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2 cursor-pointer">

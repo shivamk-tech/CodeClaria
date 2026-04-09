@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string
   image: string
   accessToken?: string
+  installationId?: number
   createdAt: Date
   updatedAt: Date
 }
@@ -35,6 +36,9 @@ const UserSchema = new Schema<IUser>(
 
     accessToken: {
       type: String,
+    },
+    installationId: {
+      type: Number,
     },
   },
   {

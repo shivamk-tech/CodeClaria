@@ -4,6 +4,7 @@ import BlurryCardsBg from '../components/BlurryCardsBg';
 import HowItWorks from '../components/HowItWorks';
 import ConnectGithub from '../components/ConnectGithub';
 import Footer from '@/components/ui/Footer';
+import FeaturesShowcase from '../components/FeaturesShowcase';
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #07061a)" }} />
       </div>
       <div id="features"><BlurryCardsBg/></div>
+      <FeaturesShowcase />
       {/* fade between sections */}
       <div className="h-24" style={{ background: "linear-gradient(to bottom, #07061a, #0d0b1f)" }} />
       <div id="how-it-works"><HowItWorks /></div>

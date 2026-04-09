@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import connectDb from "@/lib/db";
-import ConnectRepo from "@/model/connectRepo.model";
 import { triggerPRReview } from "@/services/prReviewService";
 import { triggerCommitReview } from "@/services/commitReviewService";
+import connectDb from "@/lib/db";
+import ConnectedRepo from "@/model/connectedRepo.model";
 
 function verifySignature(payload: Buffer, signature: string): boolean {
   const secret = process.env.GITHUB_APP_WEBHOOK_SECRET;
@@ -45,28 +45,41 @@ export async function POST(req: NextRequest) {
     console.log(`   Action: ${payload.action}`);
     console.log(`   Repo: ${payload.repository?.full_name}`);
 
-    // installation event
+    // installation event — save to ConnectedRepo
     if (event === "installation") {
-      await connectDb();
+      const senderId = payload.sender?.id?.toString();
+      const installationId = payload.installation?.id;
+      const accountLogin = payload.installation?.account?.login;
+      const accountType = payload.installation?.account?.type;
+      const repoSelection = payload.installation?.repository_selection;
+      const repos = (payload.repositories || []).map((r: any) => r.full_name);
 
-      if (payload.action === "created") {
-        const installationId = payload.installation.id.toString();
-        const repos = payload.repositories || [];
-        console.log(`✅ App installed on ${repos.length} repos`);
-
-        for (const repo of repos) {
-          await ConnectRepo.findOneAndUpdate(
-            { repoFullName: repo.full_name },
-            { installationId, isActive: true },
+      if (senderId && installationId) {
+        await connectDb();
+        if (payload.action === "created") {
+          await ConnectedRepo.findOneAndUpdate(
+            { githubId: senderId },
+            { installationId, accountLogin, accountType, repoSelection, repos },
             { upsert: true, new: true }
           );
+          console.log(`✅ ConnectedRepo saved for ${accountLogin} (installationId: ${installationId})`);
+        } else if (payload.action === "deleted") {
+          await ConnectedRepo.deleteOne({ githubId: senderId });
+          console.log(`🗑️ ConnectedRepo removed for ${accountLogin}`);
         }
       }
+    }
 
-      if (payload.action === "deleted") {
-        const installationId = payload.installation.id.toString();
-        await ConnectRepo.updateMany({ installationId }, { isActive: false });
-        console.log(`❌ App uninstalled — installation ${installationId} deactivated`);
+    // installation_repositories — update repo list
+    if (event === "installation_repositories") {
+      const senderId = payload.sender?.id?.toString();
+      const added = (payload.repositories_added || []).map((r: any) => r.full_name);
+      const removed = (payload.repositories_removed || []).map((r: any) => r.full_name);
+      if (senderId) {
+        await connectDb();
+        if (added.length) await ConnectedRepo.updateOne({ githubId: senderId }, { $addToSet: { repos: { $each: added } } });
+        if (removed.length) await ConnectedRepo.updateOne({ githubId: senderId }, { $pull: { repos: { $in: removed } } });
+        console.log(`🔄 Repos updated for user ${senderId}`);
       }
     }
 
