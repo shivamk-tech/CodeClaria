@@ -2,8 +2,7 @@
 
 
 
- git add . && git commit -m "updated" && git push
- 
+
 
 import React, { useEffect, useState } from 'react'
 import { DM_Sans } from 'next/font/google'
