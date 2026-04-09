@@ -2,8 +2,6 @@
 
 
 
-
-
 import React, { useEffect, useState } from 'react'
 import { DM_Sans } from 'next/font/google'
 import { useSession, signOut } from 'next-auth/react'
