@@ -24,6 +24,9 @@ export interface ISubscription extends Document {
 
 
 
+
+
+
 const SubscriptionSchema = new Schema<ISubscription>(
   {
     githubId: {
