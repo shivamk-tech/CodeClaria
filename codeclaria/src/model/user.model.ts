@@ -1,4 +1,4 @@
-import mongoose, {Schema, Document} from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IUser extends Document {
   githubId: string
@@ -9,6 +9,8 @@ export interface IUser extends Document {
   installationId?: number
   createdAt: Date
   updatedAt: Date
+  plan: "free" | "pro_monthly" | "pro_yearly"
+  planExpiry: Date
 }
 
 const UserSchema = new Schema<IUser>(
@@ -40,6 +42,12 @@ const UserSchema = new Schema<IUser>(
     installationId: {
       type: Number,
     },
+    plan: {
+      type: String,
+      enum: ["free", "pro_monthly", "pro_yearly"],
+      default: "free"
+    },
+    planExpiry: Date
   },
   {
     timestamps: true,
