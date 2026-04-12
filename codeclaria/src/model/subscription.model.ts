@@ -18,15 +18,6 @@ export interface ISubscription extends Document {
   updatedAt: Date
 }
 
-
-
-
-
-
-
-
-
-
 const SubscriptionSchema = new Schema<ISubscription>(
   {
     githubId: {
