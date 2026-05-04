@@ -1,6 +1,9 @@
 import { createAppAuth } from "@octokit/auth-app";
 import { Octokit } from "@octokit/rest";
 import Groq from "groq-sdk";
+import { canPostComment, incrementCommentCount } from "./limitService";
+import ConnectedRepo from "@/model/connectedRepo.model";
+import connectDb from "@/lib/db";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -197,6 +200,18 @@ export async function triggerCommitReview({
 
     const [owner, repo] = repository.full_name.split("/");
     const octokit = await getInstallationOctokit(installation.id);
+
+    // check limits
+    await connectDb();
+    const connected = await ConnectedRepo.findOne({ installationId: installation.id });
+    if (connected) {
+      const { allowed, reason } = await canPostComment(connected.githubId);
+      if (!allowed) {
+        console.log(`⛔ Limit reached — ${reason}`);
+        return;
+      }
+      await incrementCommentCount(connected.githubId);
+    }
 
     // review each commit (max 3 to avoid rate limits)
     for (const commit of commits.slice(0, 3)) {

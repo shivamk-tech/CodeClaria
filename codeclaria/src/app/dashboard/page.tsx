@@ -37,6 +37,29 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [appInstalled, setAppInstalled] = useState(false);
+  const [connectedRepos, setConnectedRepos] = useState<string[]>([]);
+  const [togglingRepo, setTogglingRepo] = useState<string | null>(null);
+
+  const toggleRepo = async (repoFullName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!appInstalled) {
+      window.open(`https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_SLUG || "codeclaria"}/installations/new`, "_blank");
+      return;
+    }
+    setTogglingRepo(repoFullName);
+    const enable = !connectedRepos.includes(repoFullName);
+    try {
+      await fetch("/api/github/connect-repo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ repoFullName, enable }),
+      });
+      setConnectedRepos(prev =>
+        enable ? [...prev, repoFullName] : prev.filter(r => r !== repoFullName)
+      );
+    } catch {}
+    setTogglingRepo(null);
+  };
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -55,7 +78,12 @@ export default function DashboardPage() {
 
     fetch("/api/github/installations")
       .then((r) => r.json())
-      .then((data) => { if (data.installed) setAppInstalled(true); })
+      .then((data) => {
+        if (data.installed) {
+          setAppInstalled(true);
+          setConnectedRepos(data.repos || []);
+        }
+      })
       .catch(() => {});
   }, [status]);
 
@@ -200,7 +228,7 @@ export default function DashboardPage() {
               <div
                 key={repo.id}
                 className="repo-card rounded-xl p-4 cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", animationDelay: `${i * 0.03}s` }}
+                style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${connectedRepos.includes(repo.full_name) ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.07)"}`, animationDelay: `${i * 0.03}s` }}
                 onClick={() => router.push(`/analyze?url=https://github.com/${repo.full_name}`)}
               >
                 {/* top row */}
@@ -212,6 +240,11 @@ export default function DashboardPage() {
                     <span className="text-[13px] font-semibold text-white truncate">{repo.name}</span>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
+                    {connectedRepos.includes(repo.full_name) && (
+                      <span className="text-[9px] px-1.5 py-[2px] rounded-full font-medium" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }}>
+                        ● Auto-review
+                      </span>
+                    )}
                     {repo.private && (
                       <span className="text-[9px] px-1.5 py-[2px] rounded" style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)", border: "1px solid rgba(255,255,255,0.08)" }}>
                         Private
@@ -250,9 +283,26 @@ export default function DashboardPage() {
                     </svg>
                     <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.25)" }}>{repo.stargazers_count}</span>
                   </div>
-                  <span className="text-[11px] ml-auto" style={{ color: "rgba(255,255,255,0.2)" }}>
+                  <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>
                     {new Date(repo.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </span>
+                  {/* connect toggle */}
+                  <button
+                    onClick={(e) => toggleRepo(repo.full_name, e)}
+                    disabled={togglingRepo === repo.full_name}
+                    className="ml-auto text-[10px] font-medium px-2.5 py-1 rounded-md transition-all"
+                    style={connectedRepos.includes(repo.full_name)
+                      ? { background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }
+                      : { background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }
+                    }
+                  >
+                    {togglingRepo === repo.full_name
+                      ? "..."
+                      : connectedRepos.includes(repo.full_name)
+                      ? "✓ Connected"
+                      : "+ Connect"
+                    }
+                  </button>
                 </div>
               </div>
             ))}

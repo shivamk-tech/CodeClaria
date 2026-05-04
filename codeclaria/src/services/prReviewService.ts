@@ -1,6 +1,9 @@
 import { createAppAuth } from "@octokit/auth-app";
 import { Octokit } from "@octokit/rest";
 import Groq from "groq-sdk";
+import { canPostComment, incrementCommentCount } from "./limitService";
+import ConnectedRepo from "@/model/connectedRepo.model";
+import connectDb from "@/lib/db";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -90,6 +93,24 @@ export async function triggerPRReview({
     const diffUrl = pull_request.diff_url;
 
     console.log(`\n🤖 Starting AI review for PR #${pullNumber} in ${repository.full_name}`);
+
+    // check limits
+    await connectDb();
+    const connected = await ConnectedRepo.findOne({ installationId });
+    if (connected) {
+      const { allowed, reason } = await canPostComment(connected.githubId);
+      if (!allowed) {
+        console.log(`⛔ Limit reached for user — ${reason}`);
+        const octokit = await getInstallationOctokit(installationId);
+        await octokit.issues.createComment({
+          owner, repo, issue_number: pullNumber,
+          body: `## ⛔ CodeClaria — Limit Reached\n\n${reason}\n\n[Upgrade your plan](${process.env.NEXTAUTH_URL}/pricing) to continue receiving AI reviews.`,
+        });
+        return;
+      }
+      // increment after successful review
+      await incrementCommentCount(connected.githubId);
+    }
 
     // get authenticated octokit
     const octokit = await getInstallationOctokit(installationId);

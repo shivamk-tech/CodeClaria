@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { analyzeCode } from "@/lib/gemini";
-
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN
-
-const githubHeaders: HeadersInit = {
-  Accept: "application/vnd.github+json",
-  ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
-}
+import { getServerSession } from "next-auth";
+import authOption from "@/lib/auth";
 
 // dirs to always skip
 const SKIP_DIRS = new Set([
@@ -31,10 +26,10 @@ function parseRepo(url: string) {
   return { owner, repo }
 }
 
-async function fetchContents(owner: string, repo: string, path = ""): Promise<any[]> {
+async function fetchContents(owner: string, repo: string, path = "", headers: HeadersInit): Promise<any[]> {
   const res = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-    { headers: githubHeaders }
+    { headers }
   )
   if (!res.ok) {
     const err = await res.json()
@@ -44,10 +39,9 @@ async function fetchContents(owner: string, repo: string, path = ""): Promise<an
   return Array.isArray(data) ? data : []
 }
 
-async function fetchFileContent(downloadUrl: string): Promise<string> {
-  const res = await fetch(downloadUrl, { headers: githubHeaders })
+async function fetchFileContent(downloadUrl: string, headers: HeadersInit): Promise<string> {
+  const res = await fetch(downloadUrl, { headers })
   const text = await res.text()
-  // truncate large files to 3000 chars
   return text.slice(0, 3000)
 }
 
@@ -90,10 +84,10 @@ function scoreFile(path: string): number {
   return score
 }
 
-async function collectFiles(owner: string, repo: string, path = "", depth = 0, allFiles: any[] = []): Promise<any[]> {
+async function collectFiles(owner: string, repo: string, headers: HeadersInit, path = "", depth = 0, allFiles: any[] = []): Promise<any[]> {
   if (depth > 4) return allFiles
 
-  const items = await fetchContents(owner, repo, path)
+  const items = await fetchContents(owner, repo, path, headers)
 
   // sort: priority dirs first, then files
   const dirs = items.filter(i => i.type === "dir" && !SKIP_DIRS.has(i.name))
@@ -112,8 +106,8 @@ async function collectFiles(owner: string, repo: string, path = "", depth = 0, a
   })
 
   for (const dir of sortedDirs) {
-    if (allFiles.length > 200) break // stop collecting after 200 file refs
-    await collectFiles(owner, repo, dir.path, depth + 1, allFiles)
+    if (allFiles.length > 200) break
+    await collectFiles(owner, repo, headers, dir.path, depth + 1, allFiles)
   }
 
   return allFiles
@@ -121,11 +115,19 @@ async function collectFiles(owner: string, repo: string, path = "", depth = 0, a
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOption)
+    const token = session?.accessToken
+
+    const githubHeaders: HeadersInit = {
+      Accept: "application/vnd.github+json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    }
+
     const { url } = await req.json()
     const { owner, repo } = parseRepo(url)
 
     // collect all file references
-    const allFiles = await collectFiles(owner, repo)
+    const allFiles = await collectFiles(owner, repo, githubHeaders)
 
     // sort by score and take top 25
     const topFiles = allFiles
@@ -136,7 +138,7 @@ export async function POST(req: NextRequest) {
     const filesWithContent = await Promise.all(
       topFiles.map(async (file) => {
         try {
-          const content = await fetchFileContent(file.download_url)
+          const content = await fetchFileContent(file.download_url, githubHeaders)
           return { path: file.path, content }
         } catch {
           return null

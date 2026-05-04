@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
-export type PlanType = 'free' | 'pro_monthly' | 'pro_yearly'
+export type PlanType = 'free' | 'pro' | 'team'
 export type StatusType = 'active' | 'expired' | 'cancelled'
 
 export interface ISubscription extends Document {
@@ -23,10 +23,11 @@ const SubscriptionSchema = new Schema<ISubscription>(
     githubId: {
       type: String,
       required: true,
+      unique: true,
     },
     plan: {
       type: String,
-      enum: ['free', 'pro_monthly', 'pro_yearly'],
+      enum: ['free', 'pro', 'team'],
       default: 'free',
       required: true,
     },
@@ -37,36 +38,27 @@ const SubscriptionSchema = new Schema<ISubscription>(
     },
     amount: {
       type: Number,
-      default: 0, // in rupees
+      default: 0,
     },
     currency: {
       type: String,
       default: 'INR',
     },
-    razorpayOrderId: {
-      type: String,
-    },
-    razorpayPaymentId: {
-      type: String,
-    },
-    razorpaySignature: {
-      type: String,
-    },
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
+    razorpaySignature: { type: String },
     startDate: {
       type: Date,
       default: Date.now,
     },
     endDate: {
       type: Date,
-      default: null, // null = free plan (no expiry logic needed)
+      default: null,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 )
 
-// helper to check if subscription is still valid
 SubscriptionSchema.methods.isValid = function (): boolean {
   if (this.status !== 'active') return false
   if (this.plan === 'free') return true
@@ -76,38 +68,57 @@ SubscriptionSchema.methods.isValid = function (): boolean {
 
 export const PLANS = {
   free: {
-    name: 'Free',
+    name: 'Starter',
     price: 0,
     duration: null,
+    limits: {
+      commentsPerMonth: 30,
+      privateRepos: 1,
+      publicRepos: 1,
+    },
     features: [
-      '5 repo analyses / month',
-      'AI file explanations',
+      '30 AI comments / month',
+      '1 private repo',
+      '1 public repo',
+      'PR & commit review',
       'Dependency graph',
-      'Chat with repo (50 msgs/day)',
     ],
   },
-  pro_monthly: {
-    name: 'Pro Monthly',
-    price: 50,
-    duration: 30, // days
+  pro: {
+    name: 'Pro',
+    price: 299,
+    duration: 30,
+    badge: 'Intro Offer',
+    limits: {
+      commentsPerMonth: 500,
+      privateRepos: Infinity,
+      publicRepos: Infinity,
+    },
     features: [
-      'Unlimited repo analyses',
-      'AI file explanations',
+      '500 AI comments / month',
+      'Unlimited repos',
+      'PR & commit review',
       'Dependency graph',
-      'Unlimited chat',
-      'PR & commit auto-review',
+      'Chat with repo',
       'Priority support',
     ],
   },
-  pro_yearly: {
-    name: 'Pro Yearly',
-    price: 400,
-    duration: 365, // days
+  team: {
+    name: 'Team',
+    price: 999,
+    duration: 30,
+    limits: {
+      commentsPerMonth: Infinity,
+      privateRepos: Infinity,
+      publicRepos: Infinity,
+    },
     features: [
-      'Everything in Pro Monthly',
-      'Save ₹200 vs monthly',
-      'Early access to new features',
-      'Priority support',
+      'Unlimited AI comments',
+      'Unlimited repos',
+      'Everything in Pro',
+      'Team collaboration',
+      'Early access to features',
+      'Dedicated support',
     ],
   },
 }
