@@ -123,7 +123,8 @@ export async function POST(req: NextRequest) {
     if (session?.user?.id) {
       const { allowed, reason } = await canAnalyze(session.user.id)
       if (!allowed) {
-        return NextResponse.json({ success: false, error: reason }, { status: 429 })
+        console.log(`⛔ Analyze limit reached for user ${session.user.id}: ${reason}`)
+        return NextResponse.json({ success: false, error: reason, limitReached: true }, { status: 429 })
       }
     }
 
@@ -191,7 +192,11 @@ export async function POST(req: NextRequest) {
     }
 
     // increment analyze count after success
-    if (session?.user?.id) await incrementAnalyzeCount(session.user.id)
+    if (session?.user?.id) {
+      incrementAnalyzeCount(session.user.id).catch((e) =>
+        console.error(`Failed to increment analyze count for ${session.user.id}:`, e)
+      )
+    }
 
     return NextResponse.json({
       success: true,

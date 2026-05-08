@@ -66,17 +66,18 @@ SubscriptionSchema.methods.isValid = function (): boolean {
   return new Date() < this.endDate
 }
 
+export const PLAN_LIMITS = {
+  free:  { commentsPerMonth: 30,       analysesPerMonth: 5,        privateRepos: 1,        publicRepos: 1        },
+  pro:   { commentsPerMonth: 500,      analysesPerMonth: 50,       privateRepos: Infinity, publicRepos: Infinity },
+  team:  { commentsPerMonth: Infinity, analysesPerMonth: Infinity, privateRepos: Infinity, publicRepos: Infinity },
+} as const
+
 export const PLANS = {
   free: {
     name: 'Starter',
     price: 0,
     duration: null,
-    limits: {
-      commentsPerMonth: 30,
-      analysesPerMonth: 5,
-      privateRepos: 1,
-      publicRepos: 1,
-    },
+    limits: PLAN_LIMITS.free,
     features: [
       '30 AI comments / month',
       '5 repo analyses / month',
@@ -91,12 +92,7 @@ export const PLANS = {
     price: 299,
     duration: 30,
     badge: 'Intro Offer',
-    limits: {
-      commentsPerMonth: 500,
-      analysesPerMonth: 50,
-      privateRepos: Infinity,
-      publicRepos: Infinity,
-    },
+    limits: PLAN_LIMITS.pro,
     features: [
       '500 AI comments / month',
       '50 repo analyses / month',
@@ -111,12 +107,7 @@ export const PLANS = {
     name: 'Team',
     price: 999,
     duration: 30,
-    limits: {
-      commentsPerMonth: Infinity,
-      analysesPerMonth: Infinity,
-      privateRepos: Infinity,
-      publicRepos: Infinity,
-    },
+    limits: PLAN_LIMITS.team,
     features: [
       'Unlimited AI comments',
       'Unlimited analyses',

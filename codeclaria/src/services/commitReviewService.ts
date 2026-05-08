@@ -204,18 +204,19 @@ export async function triggerCommitReview({
     // check limits
     await connectDb();
     const connected = await ConnectedRepo.findOne({ installationId: installation.id });
-    if (connected) {
-      const { allowed, reason } = await canPostComment(connected.githubId);
-      if (!allowed) {
-        console.log(`⛔ Limit reached — ${reason}`);
-        return;
-      }
-      await incrementCommentCount(connected.githubId);
-    }
 
     // review each commit (max 3 to avoid rate limits)
     for (const commit of commits.slice(0, 3)) {
       console.log(`\n🔍 Reviewing commit ${commit.id.slice(0, 7)} — "${commit.message}"`);
+
+      // check limit before each commit
+      if (connected) {
+        const { allowed, reason } = await canPostComment(connected.githubId);
+        if (!allowed) {
+          console.log(`⛔ Limit reached — ${reason}`);
+          return;
+        }
+      }
 
       const diff = await fetchCommitDiff(octokit, owner, repo, commit.id);
       console.log(`📄 Diff fetched (${diff.length} chars)`);
@@ -231,6 +232,10 @@ export async function triggerCommitReview({
 
       if (comments.length > 0) {
         await postInlineComments(octokit, owner, repo, commit.id, comments);
+        // increment count only after successful post
+        if (connected) {
+          await incrementCommentCount(connected.githubId);
+        }
         console.log(`💬 Inline comments posted on commit ${commit.id.slice(0, 7)}`);
       } else {
         console.log(`✅ No issues found in this commit`);

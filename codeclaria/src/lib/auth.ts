@@ -4,6 +4,13 @@ import connectDb from "./db"
 import User from "@/model/user.model"
 import Subscription from "@/model/subscription.model"
 
+async function ensureFreeSubscription(githubId: string) {
+  const existing = await Subscription.findOne({ githubId })
+  if (!existing) {
+    await Subscription.create({ githubId, plan: 'free', status: 'active', amount: 0 })
+  }
+}
+
 const authOption: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -39,19 +46,11 @@ const authOption: NextAuthOptions = {
             accessToken,
           })
           // create free subscription for new user
-          await Subscription.create({
-            githubId,
-            plan: 'free',
-            status: 'active',
-            amount: 0,
-          })
+          await ensureFreeSubscription(githubId)
         } else {
           await User.updateOne({ githubId }, { accessToken })
           // create free subscription if missing (existing users)
-          const existingSub = await Subscription.findOne({ githubId })
-          if (!existingSub) {
-            await Subscription.create({ githubId, plan: 'free', status: 'active', amount: 0 })
-          }
+          await ensureFreeSubscription(githubId)
         }
 
         return true

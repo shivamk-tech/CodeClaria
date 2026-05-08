@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface Repo {
   id: number;
@@ -102,8 +102,9 @@ export default function DashboardPage() {
     r.description?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const isRepoConnected = (fullName: string) =>
-    repoSelection === 'all' || connectedRepos.includes(fullName);
+  const isRepoConnected = useCallback((fullName: string) =>
+    repoSelection === 'all' || connectedRepos.includes(fullName)
+  , [repoSelection, connectedRepos]);
 
   const topLangs = [...new Set(repos.map(r => r.language).filter(Boolean))].slice(0, 4);
   const privateCount = repos.filter(r => r.private).length;
