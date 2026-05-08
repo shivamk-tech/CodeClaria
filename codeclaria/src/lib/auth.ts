@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
 import connectDb from "./db"
 import User from "@/model/user.model"
+import Subscription from "@/model/subscription.model"
 
 const authOption: NextAuthOptions = {
   providers: [
@@ -22,7 +23,7 @@ const authOption: NextAuthOptions = {
         await connectDb()
 
         const githubId = profile?.id?.toString()
-        const email = profile?.email
+        const email = profile?.email || null
         const name = profile?.name || profile?.login
         const image = profile?.avatar_url
         const accessToken = account.access_token
@@ -37,9 +38,20 @@ const authOption: NextAuthOptions = {
             image,
             accessToken,
           })
+          // create free subscription for new user
+          await Subscription.create({
+            githubId,
+            plan: 'free',
+            status: 'active',
+            amount: 0,
+          })
         } else {
-          // update accessToken on every login in case it changed
           await User.updateOne({ githubId }, { accessToken })
+          // create free subscription if missing (existing users)
+          const existingSub = await Subscription.findOne({ githubId })
+          if (!existingSub) {
+            await Subscription.create({ githubId, plan: 'free', status: 'active', amount: 0 })
+          }
         }
 
         return true

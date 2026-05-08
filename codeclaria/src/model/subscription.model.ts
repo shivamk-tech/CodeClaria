@@ -73,11 +73,13 @@ export const PLANS = {
     duration: null,
     limits: {
       commentsPerMonth: 30,
+      analysesPerMonth: 5,
       privateRepos: 1,
       publicRepos: 1,
     },
     features: [
       '30 AI comments / month',
+      '5 repo analyses / month',
       '1 private repo',
       '1 public repo',
       'PR & commit review',
@@ -91,11 +93,13 @@ export const PLANS = {
     badge: 'Intro Offer',
     limits: {
       commentsPerMonth: 500,
+      analysesPerMonth: 50,
       privateRepos: Infinity,
       publicRepos: Infinity,
     },
     features: [
       '500 AI comments / month',
+      '50 repo analyses / month',
       'Unlimited repos',
       'PR & commit review',
       'Dependency graph',
@@ -109,11 +113,13 @@ export const PLANS = {
     duration: 30,
     limits: {
       commentsPerMonth: Infinity,
+      analysesPerMonth: Infinity,
       privateRepos: Infinity,
       publicRepos: Infinity,
     },
     features: [
       'Unlimited AI comments',
+      'Unlimited analyses',
       'Unlimited repos',
       'Everything in Pro',
       'Team collaboration',

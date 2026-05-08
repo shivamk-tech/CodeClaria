@@ -75,6 +75,34 @@ export async function incrementCommentCount(githubId: string) {
   )
 }
 
+export async function canAnalyze(githubId: string): Promise<{ allowed: boolean; reason?: string }> {
+  await connectDb()
+  const plan = await getUserPlan(githubId)
+  const limits = PLANS[plan].limits
+  const month = currentMonth()
+
+  const usage = await Usage.findOne({ githubId, month })
+  const analysesUsed = usage?.analysesUsed ?? 0
+
+  if (analysesUsed >= limits.analysesPerMonth) {
+    return {
+      allowed: false,
+      reason: `Monthly analysis limit reached (${limits.analysesPerMonth}). Upgrade your plan to analyze more repos.`,
+    }
+  }
+  return { allowed: true }
+}
+
+export async function incrementAnalyzeCount(githubId: string) {
+  await connectDb()
+  const month = currentMonth()
+  await Usage.findOneAndUpdate(
+    { githubId, month },
+    { $inc: { analysesUsed: 1 } },
+    { upsert: true }
+  )
+}
+
 export async function trackRepoConnection(githubId: string, repoFullName: string, isPrivate: boolean) {
   await connectDb()
   const month = currentMonth()

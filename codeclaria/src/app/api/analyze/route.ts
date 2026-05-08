@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { analyzeCode } from "@/lib/gemini";
 import { getServerSession } from "next-auth";
 import authOption from "@/lib/auth";
+import { canAnalyze, incrementAnalyzeCount } from "@/services/limitService";
 
 // dirs to always skip
 const SKIP_DIRS = new Set([
@@ -118,6 +119,14 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOption)
     const token = session?.accessToken
 
+    // check analyze limit
+    if (session?.user?.id) {
+      const { allowed, reason } = await canAnalyze(session.user.id)
+      if (!allowed) {
+        return NextResponse.json({ success: false, error: reason }, { status: 429 })
+      }
+    }
+
     const githubHeaders: HeadersInit = {
       Accept: "application/vnd.github+json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -180,6 +189,9 @@ export async function POST(req: NextRequest) {
       console.error("AI error:", e)
       aiResult = "AI failed to respond"
     }
+
+    // increment analyze count after success
+    if (session?.user?.id) await incrementAnalyzeCount(session.user.id)
 
     return NextResponse.json({
       success: true,
