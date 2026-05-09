@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { label: "Home",         href: "#home" },
   { label: "Features",     href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Pricing",      href: null },
+  { label: "Pricing",      href: "/pricing" },
   { label: "Docs",         href: "/docs" },
 ]
 
@@ -25,9 +25,8 @@ const Navbar = () => {
   const router = useRouter()
   const pathname = usePathname()
 
-  // on /docs show solid full-width navbar, not floating pill
+  const isFloating = scrolled
   const isDocs = pathname === '/docs'
-  const isFloating = scrolled && !isDocs
 
   const scrollTo = (href: string | null) => {
     if (!href) return;
@@ -53,12 +52,14 @@ const Navbar = () => {
     <>
       <nav
         className={`${dmSans.className} fixed z-[9999] flex items-center justify-between transition-all duration-400
-          ${isDocs
-            ? "top-0 left-0 right-0 w-full bg-[rgba(7,6,26,0.85)] backdrop-blur-md border-b border-white/10 px-6 md:px-14 py-5"
-            : isFloating
-            ? "top-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[1600px] rounded-full bg-[rgba(10,21,32,0.7)] backdrop-blur-md border border-white/10 px-6 md:px-10 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          ${isFloating
+            ? "top-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[1600px] rounded-full bg-[#0a1520] border border-white/10 px-6 md:px-10 shadow-[0_8px_32px_#080716]"
             : "top-0 left-1/2 -translate-x-1/2 w-[95%] bg-transparent px-4 md:px-14 py-4"
           }`}
+        style={isFloating
+          ? { paddingTop: isDocs ? 14 : 8, paddingBottom: isDocs ? 14 : 8, paddingLeft: isDocs ? 32 : 24, paddingRight: isDocs ? 32 : 24 }
+          : { paddingTop: 20, paddingBottom: 16 }
+        }
       >
         {/* logo */}
         <a href="/" className="text-[#e8e2d5] no-underline font-light text-lg tracking-[0.25em] shrink-0">
@@ -90,7 +91,7 @@ const Navbar = () => {
               <a href="/dashboard" className="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-2 cursor-pointer">
                 Dashboard
               </a>
-              <div className="flex items-center gap-2 pl-3 cursor-pointer" style={{ borderLeft: "1px solid rgba(255,255,255,0.1)" }}>
+              <div className="flex items-center gap-2 pl-3 cursor-pointer" style={{ borderLeft: "1px solid #1a1830" }}>
                 {session.user?.image && (
                   <a href="/profile">
                     <img src={session.user.image} alt="avatar" className="w-7 h-7 cursor-pointer rounded-full border border-white/10 hover:border-white/30 transition-all" />
@@ -132,7 +133,7 @@ const Navbar = () => {
       {/* mobile menu */}
       <div
         className={`${dmSans.className} fixed top-0 left-0 right-0 z-[9998] flex flex-col px-6 pt-24 pb-8 md:hidden transition-all duration-300 ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        style={{ background: "rgba(7,6,26,0.97)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ background: "#07061a", borderBottom: "1px solid #131228" }}
       >
         <ul className="list-none flex flex-col gap-1 mb-6">
           {NAV_ITEMS.map((item) => (
@@ -149,7 +150,7 @@ const Navbar = () => {
 
         {session ? (
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="flex items-center gap-3 pb-4" style={{ borderBottom: "1px solid #131228" }}>
               {session.user?.image && (
                 <img src={session.user.image} alt="avatar" className="w-8 h-8 rounded-full border border-white/10" />
               )}

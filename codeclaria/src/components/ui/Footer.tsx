@@ -87,8 +87,8 @@ export default function Footer() {
         className="pointer-events-none select-none overflow-hidden"
         style={{
           marginTop: "-0.5rem",
-          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)",
-          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, #080716 0%, rgba(0,0,0,0) 100%)",
+          maskImage: "linear-gradient(to bottom, #080716 0%, rgba(0,0,0,0) 100%)",
         }}
       >
         <p

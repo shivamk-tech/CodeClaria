@@ -5,27 +5,27 @@ import { Link, Brain, GitPullRequest, BarChart2, Network, MessageCircle, Lock } 
 
 const FEATURES = [
   {
-    icon: <Link size={18} color="#2563eb" />,
+    icon: <Link size={18} color="#4f63e7" />,
     title: "Paste Any Repo URL",
     desc: "Drop any public GitHub repo link. We clone it, read every file, and get to work — no setup, no config.",
     badge: "Input",
-    badgeColor: { background: "#dbeafe", color: "#1d4ed8" },
+    badgeColor: { background: "#dbeafe", color: "#3b4fd4" },
     files: [{ name: "github.com/user/repo", label: "URL" }],
   },
   {
-    icon: <Brain size={18} color="#6d28d9" />,
+    icon: <Brain size={18} color="#3b4fd4" />,
     title: "AI Code Explanation",
     desc: "Plain-English breakdown of what the codebase does, how every file connects, and where the problems are.",
     badge: "AI",
-    badgeColor: { background: "#ede9fe", color: "#6d28d9" },
+    badgeColor: { background: "#ede9fe", color: "#3b4fd4" },
     files: [{ name: "analyzeCode()", label: "FN" }, { name: "groq/llama-3.3", label: "AI" }],
   },
   {
-    icon: <GitPullRequest size={18} color="#15803d" />,
+    icon: <GitPullRequest size={18} color="#3b4fd4" />,
     title: "Auto PR Reviews",
     desc: "GitHub App webhook fires on PR open. AI reviews the diff and posts inline comments directly on GitHub.",
     badge: "Webhook",
-    badgeColor: { background: "#dcfce7", color: "#15803d" },
+    badgeColor: { background: "#dcfce7", color: "#3b4fd4" },
     files: [{ name: "pull_request.opened", label: "EVENT" }, { name: "/api/webhook", label: "POST" }],
   },
   {
@@ -113,7 +113,7 @@ function FeatureCards() {
       <div className="text-center mb-12 px-4">
         <div
           className="inline-flex items-center gap-2 text-[11px] font-medium px-4 py-[6px] rounded-full mb-4"
-          style={{ color: "#a78bfa", border: "1px solid rgba(167,139,250,0.2)", background: "rgba(167,139,250,0.07)" }}
+          style={{ color: "rgba(255,255,255,0.45)", border: "1px solid #1a1830", background: "#0f0e20" }}
         >
           ✦ Features
         </div>
@@ -169,10 +169,7 @@ export default function AuroraBackground({ children }: { children?: React.ReactN
   return (
     <div className="relative w-full min-h-screen overflow-hidden" style={{ background: "#07061a" }}>
       <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, #0d0b1f 0%, #07061a 40%, #07061a 100%)" }} />
-      <div className="absolute" style={{ top: "-120px", left: "50%", transform: "translateX(-50%)", width: "700px", height: "500px", background: "radial-gradient(ellipse at 50% 20%, rgba(139,92,246,0.45) 0%, rgba(109,40,217,0.2) 35%, rgba(76,29,149,0.08) 60%, transparent 75%)", filter: "blur(40px)" }} />
-      <div className="absolute" style={{ top: "-60px", left: "50%", transform: "translateX(-50%)", width: "320px", height: "260px", background: "radial-gradient(ellipse at 50% 10%, rgba(192,132,252,0.5) 0%, rgba(167,139,250,0.2) 45%, transparent 70%)", filter: "blur(24px)" }} />
-      <div className="absolute" style={{ top: "-40px", left: "50%", transform: "translateX(-50%)", width: "200px", height: "160px", background: "radial-gradient(ellipse at 50% 0%, rgba(232,121,249,0.3) 0%, transparent 65%)", filter: "blur(16px)" }} />
-      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 100%, rgba(30,58,138,0.15) 0%, transparent 70%)" }} />
+      <div className="absolute" style={{ top: "-120px", left: "50%", transform: "translateX(-50%)", width: "600px", height: "400px", background: "radial-gradient(ellipse at 50% 20%, rgba(139,92,246,0.12) 0%, transparent 70%)", filter: "blur(60px)" }} />
       <div className="absolute top-0 left-0 right-0 h-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, #07061a, transparent)" }} />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-24">
         {children ?? <FeatureCards />}

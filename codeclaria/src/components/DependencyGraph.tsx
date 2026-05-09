@@ -22,9 +22,9 @@ interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
 }
 
 const FOLDER_COLORS: Record<string, string> = {
-  src: "#a78bfa", app: "#60a5fa", lib: "#34d399",
-  utils: "#fb923c", components: "#f472b6", api: "#facc15",
-  hooks: "#38bdf8", models: "#4ade80", server: "#c084fc",
+  src: "#8b9cf4", app: "#8b9cf4", lib: "#34d399",
+  utils: "#8b9cf4", components: "#f472b6", api: "#facc15",
+  hooks: "#38bdf8", models: "#8b9cf4", server: "#c084fc",
   pages: "#818cf8", root: "#94a3b8", default: "#94a3b8",
 };
 
@@ -106,7 +106,7 @@ export default function DependencyGraph({ files, dependencies }: Props) {
       .attr("patternUnits", "userSpaceOnUse");
     pattern.append("path")
       .attr("d", "M 30 0 L 0 0 0 30")
-      .attr("fill", "none").attr("stroke", "rgba(255,255,255,0.03)").attr("stroke-width", 1);
+      .attr("fill", "none").attr("stroke", "#0d0c1e").attr("stroke-width", 1);
     svg.append("rect").attr("width", W).attr("height", H).attr("fill", "url(#grid)");
 
     const g = svg.append("g");
@@ -246,9 +246,9 @@ export default function DependencyGraph({ files, dependencies }: Props) {
             <button key={tab} onClick={() => setActiveTab(tab)}
               className="text-[11px] font-medium px-3 py-1 rounded-md capitalize transition-all"
               style={{
-                background: activeTab === tab ? "rgba(167,139,250,0.15)" : "transparent",
-                color: activeTab === tab ? "#a78bfa" : "rgba(255,255,255,0.35)",
-                border: activeTab === tab ? "1px solid rgba(167,139,250,0.2)" : "1px solid transparent",
+                background: activeTab === tab ? "rgba(139,156,244,0.15)" : "transparent",
+                color: activeTab === tab ? "#8b9cf4" : "rgba(255,255,255,0.35)",
+                border: activeTab === tab ? "1px solid rgba(139,156,244,0.2)" : "1px solid transparent",
               }}
             >
               {tab === "graph" ? "🕸 Graph" : "🌲 Tree"}

@@ -2,16 +2,24 @@
 
 import { useSession, signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import Nav from "@/components/Nav";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [currentPlan, setCurrentPlan] = useState<string>("free");
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
   }, [status, router]);
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    fetch("/api/payment/current-plan")
+      .then(r => r.json())
+      .then(d => setCurrentPlan(d.plan || "free"))
+      .catch(() => {});
+  }, [status]);
 
   if (status === "loading") {
     return (
@@ -25,12 +33,11 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen" style={{ background: "#07061a", fontFamily: "'DM Sans', sans-serif", color: "#fff" }}>
-      <Nav />
 
       <div className="max-w-[680px] mx-auto px-6 pt-36 pb-24">
 
         {/* header */}
-        <div className="flex items-start gap-5 mb-10 pb-10" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-start gap-5 mb-10 pb-10" style={{ borderBottom: "1px solid #131228" }}>
           {user?.image ? (
             <img src={user.image} alt="avatar" className="w-16 h-16 rounded-full border border-white/10 shrink-0" />
           ) : (
@@ -41,19 +48,20 @@ export default function ProfilePage() {
           <div>
             <h1 className="text-[22px] font-bold text-white mb-1">{user?.name}</h1>
             <p className="text-[13px]" style={{ color: "rgba(255,255,255,0.4)" }}>{user?.email}</p>
-            <div className="flex items-center gap-2 mt-2">
-              {session?.accessToken ? (
-                <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }}>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              {session?.accessToken && (
+                <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#8b9cf4", border: "1px solid rgba(34,197,94,0.2)" }}>
                   ● GitHub Connected
                 </span>
+              )}
+              {currentPlan !== "free" ? (
+                <span className="text-[11px] px-2 py-[2px] rounded font-semibold" style={{ background: "rgba(139,156,244,0.12)", color: "#8b9cf4", border: "1px solid rgba(139,156,244,0.25)" }}>
+                  ✦ {currentPlan === "pro" ? "Pro" : "Team"} Plan
+                </span>
               ) : (
-                <button
-                  onClick={() => signIn("github", { callbackUrl: "/profile" })}
-                  className="text-[11px] px-3 py-[3px] rounded font-medium transition-all hover:opacity-90"
-                  style={{ background: "#24292e", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }}
-                >
-                  Connect GitHub
-                </button>
+                <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "#111023", color: "rgba(255,255,255,0.35)", border: "1px solid #161528" }}>
+                  Free Plan
+                </span>
               )}
             </div>
           </div>
@@ -67,8 +75,9 @@ export default function ProfilePage() {
             { label: "User ID", value: user?.id, mono: true },
             { label: "Auth provider", value: "GitHub OAuth" },
             { label: "GitHub", value: session?.accessToken ? "Connected" : "Not connected" },
+            { label: "Plan", value: currentPlan === "free" ? "Starter (Free)" : currentPlan === "pro" ? "Pro ✦" : "Team ✦" },
           ].map((row) => (
-            <div key={row.label} className="flex items-center justify-between py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <div key={row.label} className="flex items-center justify-between py-4" style={{ borderBottom: "1px solid #111023" }}>
               <span className="text-[13px]" style={{ color: "rgba(255,255,255,0.35)" }}>{row.label}</span>
               <span className={`text-[13px] ${row.mono ? "font-mono" : ""}`} style={{ color: "rgba(255,255,255,0.7)" }}>
                 {row.value || "—"}
@@ -81,21 +90,18 @@ export default function ProfilePage() {
         <div className="space-y-3">
           <h2 className="text-[11px] uppercase tracking-[0.12em] mb-4" style={{ color: "rgba(255,255,255,0.25)" }}>Actions</h2>
           <div className="flex flex-col sm:flex-row gap-3">
-            <a
-              href="/dashboard"
-              className="flex-1 text-center text-[13px] font-medium py-3 rounded-lg transition-all hover:bg-white/5"
-              style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)" }}
-            >
+            <a href="/dashboard" className="flex-1 text-center text-[13px] font-medium py-3 rounded-lg transition-all hover:bg-white/5" style={{ border: "1px solid #1a1830", color: "rgba(255,255,255,0.6)" }}>
               Go to Dashboard
             </a>
-            <a
-              href="/analyze"
-              className="flex-1 text-center text-[13px] font-medium py-3 rounded-lg transition-all hover:bg-white/90"
-              style={{ background: "#fff", color: "#07061a" }}
-            >
+            <a href="/analyze" className="flex-1 text-center text-[13px] font-medium py-3 rounded-lg transition-all hover:bg-white/90" style={{ background: "#fff", color: "#07061a" }}>
               Analyze a Repo
             </a>
           </div>
+          {currentPlan === "free" && (
+            <a href="/pricing" className="w-full flex items-center justify-center gap-2 text-[13px] font-semibold py-3 rounded-lg transition-all hover:opacity-90" style={{ background: "rgba(139,156,244,0.12)", color: "#8b9cf4", border: "1px solid rgba(139,156,244,0.25)" }}>
+              ✦ Upgrade to Pro
+            </a>
+          )}
 
           {!session?.accessToken && (
             <button

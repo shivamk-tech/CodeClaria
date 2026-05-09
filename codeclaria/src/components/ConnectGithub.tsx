@@ -46,14 +46,14 @@ export default function ConnectGithub() {
             </div>
 
             <div className="flex items-center gap-2 mb-8">
-              <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }}>
+              <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#8b9cf4", border: "1px solid rgba(34,197,94,0.2)" }}>
                 ● GitHub Connected
               </span>
             </div>
 
             <h1 className="font-extrabold text-white tracking-[-0.03em] leading-[1.05] mb-4" style={{ fontSize: "clamp(24px, 4vw, 38px)" }}>
               You're all set.<br />
-              <span style={{ color: "#a78bfa" }}>Start analyzing.</span>
+              <span style={{ color: "#8b9cf4" }}>Start analyzing.</span>
             </h1>
 
             <p className="text-[14px] mb-8" style={{ color: "rgba(255,255,255,0.4)" }}>
@@ -71,7 +71,7 @@ export default function ConnectGithub() {
               <a
                 href="/analyze"
                 className="w-full flex items-center justify-center gap-2 text-[14px] font-medium rounded-xl px-8 py-3 transition-all hover:bg-white/5"
-                style={{ border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}
+                style={{ border: "1px solid #1c1a32", color: "rgba(255,255,255,0.6)" }}
               >
                 Analyze a repo by URL
               </a>
@@ -82,7 +82,7 @@ export default function ConnectGithub() {
           <>
             <h1 className="font-extrabold text-white tracking-[-0.03em] leading-[1.05] mb-4" style={{ fontSize: "clamp(28px, 4vw, 44px)" }}>
               Connect your GitHub.<br />
-              <span style={{ color: "#a78bfa" }}>Understand everything.</span>
+              <span style={{ color: "#8b9cf4" }}>Understand everything.</span>
             </h1>
 
             <p className="text-[15px] mb-8" style={{ color: "rgba(255,255,255,0.4)" }}>

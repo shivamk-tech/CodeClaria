@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
-
-export type PlanType = 'free' | 'pro' | 'team'
+import { PLANS, PLAN_LIMITS, PlanType } from '@/lib/plans'
+export { PLANS, PLAN_LIMITS }
+export type { PlanType }
 export type StatusType = 'active' | 'expired' | 'cancelled'
 
 export interface ISubscription extends Document {
@@ -64,60 +65,6 @@ SubscriptionSchema.methods.isValid = function (): boolean {
   if (this.plan === 'free') return true
   if (!this.endDate) return false
   return new Date() < this.endDate
-}
-
-export const PLAN_LIMITS = {
-  free:  { commentsPerMonth: 30,       analysesPerMonth: 5,        privateRepos: 1,        publicRepos: 1        },
-  pro:   { commentsPerMonth: 500,      analysesPerMonth: 50,       privateRepos: Infinity, publicRepos: Infinity },
-  team:  { commentsPerMonth: Infinity, analysesPerMonth: Infinity, privateRepos: Infinity, publicRepos: Infinity },
-} as const
-
-export const PLANS = {
-  free: {
-    name: 'Starter',
-    price: 0,
-    duration: null,
-    limits: PLAN_LIMITS.free,
-    features: [
-      '30 AI comments / month',
-      '5 repo analyses / month',
-      '1 private repo',
-      '1 public repo',
-      'PR & commit review',
-      'Dependency graph',
-    ],
-  },
-  pro: {
-    name: 'Pro',
-    price: 299,
-    duration: 30,
-    badge: 'Intro Offer',
-    limits: PLAN_LIMITS.pro,
-    features: [
-      '500 AI comments / month',
-      '50 repo analyses / month',
-      'Unlimited repos',
-      'PR & commit review',
-      'Dependency graph',
-      'Chat with repo',
-      'Priority support',
-    ],
-  },
-  team: {
-    name: 'Team',
-    price: 999,
-    duration: 30,
-    limits: PLAN_LIMITS.team,
-    features: [
-      'Unlimited AI comments',
-      'Unlimited analyses',
-      'Unlimited repos',
-      'Everything in Pro',
-      'Team collaboration',
-      'Early access to features',
-      'Dedicated support',
-    ],
-  },
 }
 
 export default mongoose.models.Subscription ||

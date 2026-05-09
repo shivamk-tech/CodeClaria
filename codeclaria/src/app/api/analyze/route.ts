@@ -193,9 +193,11 @@ export async function POST(req: NextRequest) {
 
     // increment analyze count after success
     if (session?.user?.id) {
-      incrementAnalyzeCount(session.user.id).catch((e) =>
+      try {
+        await incrementAnalyzeCount(session.user.id)
+      } catch (e) {
         console.error(`Failed to increment analyze count for ${session.user.id}:`, e)
-      )
+      }
     }
 
     return NextResponse.json({

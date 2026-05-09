@@ -74,7 +74,7 @@ function AnalyzeContent() {
 
                 {/* input row */}
                 <div className="w-full max-w-[580px] flex gap-2">
-                    <div className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-lg border" style={{ background: "#0d0b1f", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <div className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-lg border" style={{ background: "#0d0b1f", border: "1px solid #1a1830" }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" strokeLinecap="round">
                             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                         </svg>
@@ -121,10 +121,10 @@ function AnalyzeContent() {
                 <div className="max-w-[1000px] mx-auto px-6 pb-24">
 
                     {/* repo label */}
-                    <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid #131228" }}>
                         <div className="w-2 h-2 rounded-full bg-green-400" />
                         <span className="text-[13px] font-mono" style={{ color: "rgba(255,255,255,0.5)" }}>{repoName}</span>
-                        <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }}>
+                        <span className="text-[11px] px-2 py-[2px] rounded" style={{ background: "rgba(34,197,94,0.1)", color: "#8b9cf4", border: "1px solid rgba(34,197,94,0.2)" }}>
                             Analysis ready
                         </span>
                     </div>
@@ -154,7 +154,7 @@ function AnalyzeContent() {
                                 <p className="text-[15px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.75)" }}>{parsed.summary}</p>
                             </div>
 
-                            <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                            <div style={{ height: "1px", background: "#131228" }} />
 
                             {/* architecture */}
                             {parsed.architecture && (
@@ -169,7 +169,7 @@ function AnalyzeContent() {
                                             <div className="flex flex-wrap items-center gap-2">
                                                 {parsed.architecture.flow.map((step: string, i: number) => (
                                                     <div key={i} className="flex items-center gap-2">
-                                                        <span className="text-[12px] px-3 py-1.5 rounded-md" style={{ background: "#0d0b1f", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }}>{step}</span>
+                                                        <span className="text-[12px] px-3 py-1.5 rounded-md" style={{ background: "#0d0b1f", border: "1px solid #161528", color: "rgba(255,255,255,0.6)" }}>{step}</span>
                                                         {i < parsed.architecture.flow.length - 1 && (
                                                             <span style={{ color: "rgba(255,255,255,0.2)" }}>→</span>
                                                         )}
@@ -184,8 +184,8 @@ function AnalyzeContent() {
                                         <div className="space-y-2">
                                             <p className="text-[11px] mb-3" style={{ color: "rgba(255,255,255,0.25)" }}>Key files</p>
                                             {parsed.architecture.components.map((c: any, i: number) => (
-                                                <div key={i} className="flex items-start gap-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                                                    <code className="text-[12px] shrink-0 mt-[1px]" style={{ color: "#a78bfa" }}>{c.name}</code>
+                                                <div key={i} className="flex items-start gap-4 py-3" style={{ borderBottom: "1px solid #0f0e20" }}>
+                                                    <code className="text-[12px] shrink-0 mt-[1px]" style={{ color: "#8b9cf4" }}>{c.name}</code>
                                                     <p className="text-[13px]" style={{ color: "rgba(255,255,255,0.45)" }}>{c.role}</p>
                                                 </div>
                                             ))}
@@ -194,7 +194,7 @@ function AnalyzeContent() {
                                 </div>
                             )}
 
-                            <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                            <div style={{ height: "1px", background: "#131228" }} />
 
                             {/* issues */}
                             {parsed.issues?.length > 0 && (
@@ -203,7 +203,7 @@ function AnalyzeContent() {
                                     <div className="space-y-3">
                                         {parsed.issues.map((issue: any, i: number) => {
                                             const s = issue.severity;
-                                            const dot = s === "high" ? "#f87171" : s === "medium" ? "#facc15" : "#4ade80";
+                                            const dot = s === "high" ? "#f87171" : s === "medium" ? "#facc15" : "#8b9cf4";
                                             return (
                                                 <div key={i} className="py-3 pl-4" style={{ borderLeft: `2px solid ${dot}` }}>
                                                     <div className="flex items-center gap-2 mb-1">
@@ -223,7 +223,7 @@ function AnalyzeContent() {
                         {/* right col — quality score */}
                         {parsed.code_quality && (
                             <div className="space-y-4">
-                                <div className="p-5 rounded-xl" style={{ background: "#0d0b1f", border: "1px solid rgba(255,255,255,0.07)" }}>
+                                <div className="p-5 rounded-xl" style={{ background: "#0d0b1f", border: "1px solid #141328" }}>
                                     <p className="text-[11px] uppercase tracking-[0.12em] mb-4" style={{ color: "rgba(255,255,255,0.3)" }}>Quality Score</p>
                                     <div className="flex items-end gap-2 mb-1">
                                         <span className="text-[48px] font-bold leading-none text-white">{parsed.code_quality.score}</span>
@@ -233,8 +233,8 @@ function AnalyzeContent() {
                                         {parsed.code_quality.score >= 8 ? "Excellent" : parsed.code_quality.score >= 6 ? "Good" : parsed.code_quality.score >= 4 ? "Needs work" : "Poor"}
                                     </p>
                                     {/* bar */}
-                                    <div className="h-1 rounded-full w-full mb-5" style={{ background: "rgba(255,255,255,0.06)" }}>
-                                        <div className="h-1 rounded-full" style={{ width: `${parsed.code_quality.score * 10}%`, background: parsed.code_quality.score >= 7 ? "#4ade80" : parsed.code_quality.score >= 5 ? "#facc15" : "#f87171" }} />
+                                    <div className="h-1 rounded-full w-full mb-5" style={{ background: "#131228" }}>
+                                        <div className="h-1 rounded-full" style={{ width: `${parsed.code_quality.score * 10}%`, background: parsed.code_quality.score >= 7 ? "#8b9cf4" : parsed.code_quality.score >= 5 ? "#facc15" : "#f87171" }} />
                                     </div>
 
                                     <div className="space-y-3">
@@ -242,11 +242,11 @@ function AnalyzeContent() {
                                             <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Strengths</p>
                                             {parsed.code_quality.strengths?.map((s: string, i: number) => (
                                                 <p key={i} className="text-[12px] mb-1 flex items-start gap-2" style={{ color: "rgba(255,255,255,0.5)" }}>
-                                                    <span style={{ color: "#4ade80" }}>+</span>{s}
+                                                    <span style={{ color: "#8b9cf4" }}>+</span>{s}
                                                 </p>
                                             ))}
                                         </div>
-                                        <div style={{ height: "1px", background: "rgba(255,255,255,0.05)" }} />
+                                        <div style={{ height: "1px", background: "#111023" }} />
                                         <div>
                                             <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Weaknesses</p>
                                             {parsed.code_quality.weaknesses?.map((w: string, i: number) => (

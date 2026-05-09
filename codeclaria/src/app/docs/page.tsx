@@ -66,10 +66,10 @@ const NAV: NavGroup[] = [
 // ─── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
   bg: "#07061a",
-  purple: "#a78bfa",
-  blue: "#60a5fa",
-  glass: "rgba(255,255,255,0.04)",
-  border: "rgba(255,255,255,0.08)",
+  purple: "#8b9cf4",
+  blue: "#8b9cf4",
+  glass: "#0f0e20",
+  border: "#161528",
   text: "#ffffff",
   muted: "rgba(255,255,255,0.5)",
   subtle: "rgba(255,255,255,0.25)",
@@ -88,8 +88,8 @@ const li: React.CSSProperties = {
   color: "rgba(255,255,255,0.55)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 6,
 };
 const inlineCode: React.CSSProperties = {
-  background: "rgba(167,139,250,0.12)", border: "1px solid rgba(167,139,250,0.2)",
-  borderRadius: 4, color: "#c4b5fd", fontFamily: "monospace", fontSize: 13, padding: "1px 6px",
+  background: "rgba(139,156,244,0.12)", border: "1px solid rgba(139,156,244,0.2)",
+  borderRadius: 4, color: "#b5c0f8", fontFamily: "monospace", fontSize: 13, padding: "1px 6px",
 };
 const link: React.CSSProperties = { color: C.purple, textDecoration: "none" };
 
@@ -98,12 +98,12 @@ const link: React.CSSProperties = { color: C.purple, textDecoration: "none" };
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div style={{ position: "relative", background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, borderRadius: 12, marginBottom: 20, overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 16px", borderBottom: `1px solid ${C.border}`, background: "rgba(255,255,255,0.02)" }}>
+    <div style={{ position: "relative", background: "#080716", border: `1px solid ${C.border}`, borderRadius: 12, marginBottom: 20, overflow: "hidden" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 16px", borderBottom: `1px solid ${C.border}`, background: "#0d0c1e" }}>
         <span style={{ color: C.subtle, fontSize: 12, fontFamily: "monospace" }}>{language}</span>
         <button
           onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-          style={{ background: copied ? "rgba(167,139,250,0.15)" : "rgba(255,255,255,0.05)", border: `1px solid ${copied ? C.purple : C.border}`, borderRadius: 6, color: copied ? C.purple : C.muted, cursor: "pointer", fontSize: 11, padding: "3px 10px", transition: "all 0.2s", fontFamily: "'DM Sans', sans-serif" }}
+          style={{ background: copied ? "rgba(139,156,244,0.15)" : "#111023", border: `1px solid ${copied ? C.purple : C.border}`, borderRadius: 6, color: copied ? C.purple : C.muted, cursor: "pointer", fontSize: 11, padding: "3px 10px", transition: "all 0.2s", fontFamily: "'DM Sans', sans-serif" }}
         >{copied ? "Copied!" : "Copy"}</button>
       </div>
       <pre style={{ margin: 0, padding: "16px 20px", overflowX: "auto", fontSize: 13, lineHeight: 1.7, color: "#e2e8f0", fontFamily: "'Fira Code', 'Cascadia Code', monospace" }}>
@@ -115,9 +115,9 @@ function CodeBlock({ code, language = "bash" }: { code: string; language?: strin
 
 function Callout({ type, title, children }: { type: "info" | "warning" | "tip"; title: string; children: React.ReactNode }) {
   const meta = {
-    info: { icon: "ℹ", color: C.blue, bg: "rgba(96,165,250,0.07)", border: "rgba(96,165,250,0.25)" },
+    info: { icon: "ℹ", color: C.blue, bg: "rgba(139,156,244,0.07)", border: "rgba(139,156,244,0.25)" },
     warning: { icon: "⚠", color: "#fbbf24", bg: "rgba(251,191,36,0.07)", border: "rgba(251,191,36,0.25)" },
-    tip: { icon: "✦", color: C.purple, bg: "rgba(167,139,250,0.07)", border: "rgba(167,139,250,0.25)" },
+    tip: { icon: "✦", color: C.purple, bg: "rgba(139,156,244,0.07)", border: "rgba(139,156,244,0.25)" },
   }[type];
   return (
     <div style={{ background: meta.bg, border: `1px solid ${meta.border}`, borderRadius: 12, padding: "14px 18px", marginBottom: 20, display: "flex", gap: 12 }}>
@@ -134,7 +134,7 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
   return (
     <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
       <div style={{ flexShrink: 0 }}>
-        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg,rgba(167,139,250,0.3),rgba(96,165,250,0.2))", border: "1px solid rgba(167,139,250,0.4)", display: "flex", alignItems: "center", justifyContent: "center", color: C.purple, fontWeight: 700, fontSize: 13 }}>{n}</div>
+        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg,rgba(139,156,244,0.3),rgba(139,156,244,0.2))", border: "1px solid rgba(139,156,244,0.4)", display: "flex", alignItems: "center", justifyContent: "center", color: C.purple, fontWeight: 700, fontSize: 13 }}>{n}</div>
       </div>
       <div style={{ flex: 1, paddingTop: 4 }}>
         <div style={{ color: C.text, fontWeight: 600, fontSize: 15, marginBottom: 8 }}>{title}</div>
@@ -151,7 +151,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
         <thead>
           <tr>
             {headers.map((h) => (
-              <th key={h} style={{ textAlign: "left", padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderBottom: `1px solid ${C.border}`, color: C.muted, fontWeight: 600, fontSize: 11, letterSpacing: "0.05em", textTransform: "uppercase" }}>{h}</th>
+              <th key={h} style={{ textAlign: "left", padding: "10px 14px", background: "#0f0e20", borderBottom: `1px solid ${C.border}`, color: C.muted, fontWeight: 600, fontSize: 11, letterSpacing: "0.05em", textTransform: "uppercase" }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -159,7 +159,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
           {rows.map((row, i) => (
             <tr key={i} style={{ borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none" }}>
               {row.map((cell, j) => (
-                <td key={j} style={{ padding: "10px 14px", color: j === 0 ? "#c4b5fd" : C.muted, fontFamily: j === 0 ? "monospace" : "inherit", fontSize: j === 0 ? 13 : 13.5 }}>{cell}</td>
+                <td key={j} style={{ padding: "10px 14px", color: j === 0 ? "#b5c0f8" : C.muted, fontFamily: j === 0 ? "monospace" : "inherit", fontSize: j === 0 ? 13 : 13.5 }}>{cell}</td>
               ))}
             </tr>
           ))}
@@ -173,7 +173,7 @@ function SectionTitle({ title, desc, badge }: { title: string; desc: string; bad
   return (
     <div style={{ marginBottom: 32 }}>
       {badge && (
-        <span style={{ display: "inline-block", background: "rgba(167,139,250,0.12)", border: "1px solid rgba(167,139,250,0.3)", borderRadius: 20, color: C.purple, fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", padding: "3px 10px", marginBottom: 12, textTransform: "uppercase" }}>{badge}</span>
+        <span style={{ display: "inline-block", background: "rgba(139,156,244,0.12)", border: "1px solid rgba(139,156,244,0.3)", borderRadius: 20, color: C.purple, fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", padding: "3px 10px", marginBottom: 12, textTransform: "uppercase" }}>{badge}</span>
       )}
       <h1 style={{ fontSize: 30, fontWeight: 700, color: C.text, margin: "0 0 10px", lineHeight: 1.25, fontFamily: "'DM Sans', sans-serif" }}>{title}</h1>
       <p style={{ color: C.muted, fontSize: 16, lineHeight: 1.65, margin: 0 }}>{desc}</p>
@@ -203,12 +203,12 @@ function ThreeOrb() {
       mountRef.current.appendChild(renderer.domElement);
 
       const outerGeo = new THREE.IcosahedronGeometry(1.5, 1);
-      const outerMat = new THREE.MeshBasicMaterial({ color: 0xa78bfa, wireframe: true, transparent: true, opacity: 0.3 });
+      const outerMat = new THREE.MeshBasicMaterial({ color: 0x8b9cf4, wireframe: true, transparent: true, opacity: 0.3 });
       const outer = new THREE.Mesh(outerGeo, outerMat);
       scene.add(outer);
 
       const innerGeo = new THREE.IcosahedronGeometry(0.9, 0);
-      const innerMat = new THREE.MeshBasicMaterial({ color: 0x60a5fa, wireframe: true, transparent: true, opacity: 0.18 });
+      const innerMat = new THREE.MeshBasicMaterial({ color: 0x8b9cf4, wireframe: true, transparent: true, opacity: 0.18 });
       const inner = new THREE.Mesh(innerGeo, innerMat);
       scene.add(inner);
 
@@ -217,7 +217,7 @@ function ThreeOrb() {
       const pos = new Float32Array(count * 3);
       for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 5;
       ptGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-      const ptMat = new THREE.PointsMaterial({ color: 0xa78bfa, size: 0.025, transparent: true, opacity: 0.45 });
+      const ptMat = new THREE.PointsMaterial({ color: 0x8b9cf4, size: 0.025, transparent: true, opacity: 0.45 });
       scene.add(new THREE.Points(ptGeo, ptMat));
 
       const animate = () => {
@@ -436,7 +436,7 @@ export async function POST(req: Request) {
   return Response.json({ ok: true });
 }`} />
         <h2 id="comment-format" style={h2}>Comment Format</h2>
-        <div style={{ background: "rgba(0,0,0,0.3)", border: `1px solid ${C.border}`, borderRadius: 10, padding: 16, marginBottom: 20 }}>
+        <div style={{ background: "#080716", border: `1px solid ${C.border}`, borderRadius: 10, padding: 16, marginBottom: 20 }}>
           <div style={{ color: "#fbbf24", fontWeight: 700, fontSize: 13, marginBottom: 6 }}>⚠ Warning — N+1 Query Risk</div>
           <div style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.6 }}>This loop calls <code style={inlineCode}>findById</code> inside a <code style={inlineCode}>for...of</code> — one DB round-trip per iteration. Consider batching with <code style={inlineCode}>$in</code> to a single query.</div>
         </div>
@@ -868,6 +868,7 @@ export default function DocsPage() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(
     () => Object.fromEntries(NAV.map(g => [g.title, true]))
   );
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
   const toggleGroup = (title: string) =>
@@ -897,32 +898,37 @@ export default function DocsPage() {
         body { background: #07061a; }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.25); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.45); }
-        .nav-btn:hover { background: rgba(255,255,255,0.06) !important; color: rgba(255,255,255,0.9) !important; }
-        .toc-btn:hover { color: #a78bfa !important; }
-        .search-inp:focus { outline: none; border-color: rgba(167,139,250,0.45) !important; background: rgba(255,255,255,0.06) !important; }
+        ::-webkit-scrollbar-thumb { background: rgba(139,156,244,0.25); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(139,156,244,0.45); }
+        .nav-btn:hover { background: #131228 !important; color: rgba(255,255,255,0.9) !important; }
+        .toc-btn:hover { color: #8b9cf4 !important; }
+        .search-inp:focus { outline: none; border-color: rgba(139,156,244,0.45) !important; background: #131228 !important; }
         strong { color: rgba(255,255,255,0.88); }
-        a { color: #a78bfa; }
+        a { color: #8b9cf4; }
         a:hover { opacity: 0.8; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .doc-content { animation: fadeUp 0.25s ease; }
+        @media (max-width: 768px) {
+          .docs-sidebar-left { display: none !important; }
+          .docs-sidebar-right { display: none !important; }
+          .docs-main { padding: 24px 16px 60px !important; }
+        }
       `}</style>
 
-      <div style={{ fontFamily: "'DM Sans', sans-serif", background: C.bg, minHeight: "100vh", color: C.text, paddingTop: 74 }}>
+      <div style={{ fontFamily: "'DM Sans', sans-serif", background: C.bg, minHeight: "100vh", color: C.text, paddingTop: 76 }}>
 
         {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <div style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid ${C.border}`, background: "linear-gradient(180deg, rgba(167,139,250,0.07) 0%, transparent 100%)" }}>
+        <div style={{ position: "relative", overflow: "hidden" }}>
           <ThreeOrb />
           {/* subtle grid bg */}
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(#0d0c1e 1px, transparent 1px), linear-gradient(90deg, #0d0c1e 1px, transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
           <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto", textAlign: "center", padding: "72px 24px 60px" }}>
             {/* badge */}
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.25)", borderRadius: 20, padding: "4px 14px", marginBottom: 22 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.purple, display: "inline-block", boxShadow: "0 0 8px #a78bfa" }} />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(139,156,244,0.1)", border: "1px solid rgba(139,156,244,0.25)", borderRadius: 20, padding: "4px 14px", marginBottom: 22 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.purple, display: "inline-block", boxShadow: "0 0 8px #8b9cf4" }} />
               <span style={{ color: C.purple, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em" }}>DOCUMENTATION</span>
             </div>
-            <h1 style={{ fontSize: "clamp(26px,5vw,44px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 16, background: "linear-gradient(135deg,#fff 25%,#a78bfa 55%,#60a5fa 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <h1 style={{ fontSize: "clamp(26px,5vw,44px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 16, background: "linear-gradient(135deg,#fff 25%,#8b9cf4 55%,#8b9cf4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Everything you need to<br />build with CodeClaria
             </h1>
             <p style={{ color: C.muted, fontSize: 17, lineHeight: 1.6, marginBottom: 32 }}>
@@ -937,18 +943,56 @@ export default function DocsPage() {
                 placeholder="Search documentation..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: `1px solid ${C.border}`, borderRadius: 12, color: C.text, fontSize: 14, padding: "12px 48px 12px 42px", fontFamily: "'DM Sans',sans-serif", transition: "border-color 0.2s, background 0.2s" }}
+                style={{ width: "100%", background: "#0f0e20", border: `1px solid ${C.border}`, borderRadius: 12, color: C.text, fontSize: 14, padding: "12px 48px 12px 42px", fontFamily: "'DM Sans',sans-serif", transition: "border-color 0.2s, background 0.2s" }}
               />
-              <div style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "rgba(255,255,255,0.05)", border: `1px solid ${C.border}`, borderRadius: 5, color: C.subtle, fontSize: 10, padding: "2px 6px" }}>⌘K</div>
+              <div style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "#111023", border: `1px solid ${C.border}`, borderRadius: 5, color: C.subtle, fontSize: 10, padding: "2px 6px" }}>⌘K</div>
             </div>
           </div>
         </div>
+
+        {/* ── Mobile nav bar ───────────────────────────────────────── */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", borderBottom: `1px solid ${C.border}`, background: C.bg }} className="md:hidden">
+          <button
+            onClick={() => setMobileNavOpen(true)}
+            style={{ display: "flex", alignItems: "center", gap: 8, background: "#111023", border: `1px solid ${C.border}`, borderRadius: 8, padding: "7px 12px", color: C.muted, fontSize: 13, cursor: "pointer" }}
+          >
+            <span>☰</span>
+            <span>{NAV.flatMap(g => g.items).find(i => i.id === active)?.label}</span>
+          </button>
+          <span style={{ color: C.subtle, fontSize: 12 }}>Docs</span>
+        </div>
+
+        {/* ── Mobile nav drawer ────────────────────────────────────── */}
+        {mobileNavOpen && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex" }}>
+            <div style={{ flex: 1, background: "rgba(0,0,0,0.5)" }} onClick={() => setMobileNavOpen(false)} />
+            <div style={{ width: 280, background: "#0d0b1f", borderLeft: `1px solid ${C.border}`, overflowY: "auto", padding: "24px 16px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                <span style={{ color: C.text, fontWeight: 700, fontSize: 14 }}>Documentation</span>
+                <button onClick={() => setMobileNavOpen(false)} style={{ background: "none", border: "none", color: C.muted, fontSize: 18, cursor: "pointer" }}>✕</button>
+              </div>
+              {filteredNav.map(group => (
+                <div key={group.title} style={{ marginBottom: 4 }}>
+                  <div style={{ color: C.subtle, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", padding: "5px 8px", marginBottom: 2 }}>{group.title}</div>
+                  {group.items.map(item => {
+                    const isActive = active === item.id;
+                    return (
+                      <button key={item.id} onClick={() => { setActive(item.id); setMobileNavOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                        style={{ width: "100%", background: isActive ? "rgba(139,156,244,0.08)" : "none", border: "none", borderLeft: isActive ? "2px solid #8b9cf4" : "2px solid transparent", borderRadius: "0 7px 7px 0", cursor: "pointer", textAlign: "left", color: isActive ? C.purple : C.muted, fontSize: 13.5, fontWeight: isActive ? 600 : 400, padding: "7px 10px 7px 14px", marginBottom: 1, display: "block" }}
+                      >{item.label}</button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── 3-column layout ─────────────────────────────────────────── */}
         <div style={{ display: "flex", maxWidth: 1380, margin: "0 auto", padding: "0 16px" }}>
 
           {/* Left Sidebar */}
-          <aside style={{ width: 236, flexShrink: 0, position: "sticky", top: 74, height: "calc(100vh - 74px)", overflowY: "auto", padding: "28px 12px 40px 0" }}>
+          <aside className="docs-sidebar-left" style={{ width: 236, flexShrink: 0, position: "sticky", top: 72, height: "calc(100vh - 72px)", overflowY: "auto", padding: "28px 12px 40px 0" }}>
             {filteredNav.map(group => (
               <div key={group.title} style={{ marginBottom: 4 }}>
                 <button
@@ -966,8 +1010,8 @@ export default function DocsPage() {
                       className="nav-btn"
                       onClick={() => { setActive(item.id); setSearch(""); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                       style={{
-                        width: "100%", background: isActive ? "rgba(167,139,250,0.08)" : "none",
-                        border: "none", borderLeft: isActive ? "2px solid #a78bfa" : "2px solid transparent",
+                        width: "100%", background: isActive ? "rgba(139,156,244,0.08)" : "none",
+                        border: "none", borderLeft: isActive ? "2px solid #8b9cf4" : "2px solid transparent",
                         borderRadius: "0 7px 7px 0", cursor: "pointer", textAlign: "left",
                         color: isActive ? C.purple : C.muted, fontSize: 13.5,
                         fontWeight: isActive ? 600 : 400, padding: "7px 10px 7px 14px",
@@ -982,12 +1026,12 @@ export default function DocsPage() {
           </aside>
 
           {/* Main Content */}
-          <main ref={mainRef} className="doc-content" key={active} style={{ flex: 1, minWidth: 0, padding: "36px 36px 80px", maxWidth: 800 }}>
+          <main ref={mainRef} className="doc-content docs-main" key={active} style={{ flex: 1, minWidth: 0, padding: "36px 36px 80px", maxWidth: 800 }}>
             {section.content()}
           </main>
 
           {/* Right TOC */}
-          <aside style={{ width: 196, flexShrink: 0, position: "sticky", top: 74, height: "calc(100vh - 74px)", overflowY: "auto", padding: "36px 0 40px 20px" }}>
+          <aside className="docs-sidebar-right" style={{ width: 196, flexShrink: 0, position: "sticky", top: 72, height: "calc(100vh - 72px)", overflowY: "auto", padding: "36px 0 40px 20px" }}>
             <div style={{ color: C.subtle, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: 12 }}>On this page</div>
             {section.toc.map(item => {
               const anchor = item.toLowerCase().replace(/[^a-z0-9]+/g, "-");

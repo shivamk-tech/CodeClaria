@@ -119,10 +119,10 @@ function TreeItem({
       className="flex items-center gap-1.5 w-full text-left py-[3px] px-2 rounded transition-colors"
       style={{
         paddingLeft: `${depth * 14 + 8}px`,
-        background: isSelected ? "rgba(167,139,250,0.1)" : "transparent",
-        color: isSelected ? "#a78bfa" : "rgba(255,255,255,0.45)",
+        background: isSelected ? "rgba(139,156,244,0.1)" : "transparent",
+        color: isSelected ? "#8b9cf4" : "rgba(255,255,255,0.45)",
       }}
-      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = "#0f0e20"; }}
       onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = "transparent"; }}
     >
       <span className="text-[11px]">{getIcon(node.name)}</span>

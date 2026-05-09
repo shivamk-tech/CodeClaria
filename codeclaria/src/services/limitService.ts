@@ -1,5 +1,6 @@
 import connectDb from '@/lib/db'
-import Subscription, { PLANS, PlanType } from '@/model/subscription.model'
+import Subscription from '@/model/subscription.model'
+import { PLANS, PlanType } from '@/lib/plans'
 import Usage from '@/model/usage.model'
 
 function currentMonth() {

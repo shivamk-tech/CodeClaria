@@ -34,5 +34,6 @@ export const config = {
     "/api/repos/:path*",
     "/api/chat/:path*",
     "/api/github/:path*",
+    "/api/payment/:path*",
   ],
 }

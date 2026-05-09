@@ -213,7 +213,7 @@ export async function triggerCommitReview({
       if (connected) {
         const { allowed, reason } = await canPostComment(connected.githubId);
         if (!allowed) {
-          console.log(`⛔ Limit reached — ${reason}`);
+          console.log(`⛔ Limit reached for ${connected.githubId} — ${reason}`);
           return;
         }
       }
@@ -231,10 +231,18 @@ export async function triggerCommitReview({
       console.log(`✅ ${comments.length} inline comments generated`);
 
       if (comments.length > 0) {
+        // re-check limit right before posting to prevent race conditions
+        if (connected) {
+          const { allowed, reason } = await canPostComment(connected.githubId);
+          if (!allowed) {
+            console.log(`⛔ Limit reached before post — ${reason}`);
+            return;
+          }
+        }
         await postInlineComments(octokit, owner, repo, commit.id, comments);
-        // increment count only after successful post
         if (connected) {
           await incrementCommentCount(connected.githubId);
+          console.log(`📊 Comment count incremented for ${connected.githubId}`);
         }
         console.log(`💬 Inline comments posted on commit ${commit.id.slice(0, 7)}`);
       } else {

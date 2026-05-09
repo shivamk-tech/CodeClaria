@@ -21,8 +21,8 @@ export default function DemoCard() {
                 style={{ background: "#f8f7ff", border: "1px solid #ebe8ff" }}
             >
                 {[
-                    { badge: "TS", badgeStyle: { background: "#dbeafe", color: "#1d4ed8" }, name: "race-service.ts", path: "src/lib/data" },
-                    { badge: "TS", badgeStyle: { background: "#dbeafe", color: "#1d4ed8" }, name: "+page.server.ts", path: "src/routes" },
+                    { badge: "TS", badgeStyle: { background: "#dbeafe", color: "#3b4fd4" }, name: "race-service.ts", path: "src/lib/data" },
+                    { badge: "TS", badgeStyle: { background: "#dbeafe", color: "#3b4fd4" }, name: "+page.server.ts", path: "src/routes" },
                     { badge: "S", badgeStyle: { background: "#fee2e2", color: "#b91c1c" }, name: "+page.svelte", path: "src/routes" },
                 ].map((f) => (
                     <div key={f.name} className="flex items-center gap-2 font-mono text-[12px]">
@@ -41,7 +41,7 @@ export default function DemoCard() {
             <div className="flex items-center gap-2">
                 <button
                     className="text-[13px] font-semibold px-4 py-1.5 rounded-lg text-white transition-all hover:opacity-90"
-                    style={{ background: "#2563eb" }}
+                    style={{ background: "#4f63e7" }}
                 >
                     Keep
                 </button>

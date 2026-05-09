@@ -91,14 +91,14 @@ export default function ChatWithRepo({ repoUrl, filesContent }: Props) {
               className="max-w-[85%] rounded-xl px-4 py-3 text-[13px] leading-relaxed"
               style={
                 msg.role === "user"
-                  ? { background: "rgba(167,139,250,0.15)", color: "#e2e8f0", border: "1px solid rgba(167,139,250,0.2)" }
-                  : { background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.07)" }
+                  ? { background: "rgba(139,156,244,0.15)", color: "#e2e8f0", border: "1px solid rgba(139,156,244,0.2)" }
+                  : { background: "#0f0e20", color: "rgba(255,255,255,0.75)", border: "1px solid #141328" }
               }
             >
               {/* render content with code formatting */}
               {msg.content.split(/(`[^`]+`)/g).map((part, j) =>
                 part.startsWith("`") && part.endsWith("`") ? (
-                  <code key={j} className="px-1 py-0.5 rounded text-[12px] font-mono" style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa" }}>
+                  <code key={j} className="px-1 py-0.5 rounded text-[12px] font-mono" style={{ background: "rgba(139,156,244,0.15)", color: "#8b9cf4" }}>
                     {part.slice(1, -1)}
                   </code>
                 ) : (
@@ -110,7 +110,7 @@ export default function ChatWithRepo({ repoUrl, filesContent }: Props) {
               {msg.referencedFiles && msg.referencedFiles.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-white/10 flex flex-wrap gap-1">
                   {msg.referencedFiles.map((f, j) => (
-                    <span key={j} className="text-[10px] font-mono px-2 py-[2px] rounded" style={{ background: "rgba(96,165,250,0.1)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.2)" }}>
+                    <span key={j} className="text-[10px] font-mono px-2 py-[2px] rounded" style={{ background: "rgba(139,156,244,0.1)", color: "#8b9cf4", border: "1px solid rgba(139,156,244,0.2)" }}>
                       {f.split("/").pop()}
                     </span>
                   ))}
@@ -122,7 +122,7 @@ export default function ChatWithRepo({ repoUrl, filesContent }: Props) {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="px-4 py-3 rounded-xl border border-white/10 flex items-center gap-2" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="px-4 py-3 rounded-xl border border-white/10 flex items-center gap-2" style={{ background: "#0f0e20" }}>
               <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "0ms" }} />
               <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "150ms" }} />
               <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -140,7 +140,7 @@ export default function ChatWithRepo({ repoUrl, filesContent }: Props) {
               key={s}
               onClick={() => { setInput(s); }}
               className="text-[11px] px-3 py-1.5 rounded-lg transition-all hover:border-white/20"
-              style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.03)" }}
+              style={{ border: "1px solid #161528", color: "rgba(255,255,255,0.4)", background: "#0d0c1e" }}
             >
               {s}
             </button>
@@ -165,7 +165,7 @@ export default function ChatWithRepo({ repoUrl, filesContent }: Props) {
           disabled={loading || !input.trim()}
           className="px-4 py-2 rounded-lg text-[12px] font-semibold transition-all"
           style={{
-            background: input.trim() ? "#fff" : "rgba(255,255,255,0.08)",
+            background: input.trim() ? "#fff" : "#161528",
             color: input.trim() ? "#07061a" : "rgba(255,255,255,0.3)",
           }}
         >

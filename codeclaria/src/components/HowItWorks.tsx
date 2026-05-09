@@ -18,9 +18,9 @@ interface Step {
 function RepoPasteMockup() {
   return (
     <div className="rounded-xl p-5 font-mono text-xs border border-white/10" style={{ background: "#13112a" }}>
-      <p className="text-[10px] tracking-[0.16em] text-[#a78bfa] uppercase mb-3">Paste repo url</p>
+      <p className="text-[10px] tracking-[0.16em] text-[#8b9cf4] uppercase mb-3">Paste repo url</p>
       <div className="rounded-lg px-3 py-2.5 flex items-center gap-2 text-white/30 mb-3 border border-white/10" style={{ background: "#13112a" }}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b9cf4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
           <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
         </svg>
@@ -33,9 +33,9 @@ function RepoPasteMockup() {
       </div>
       <div className="flex items-center gap-2">
         <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "#1e1b3a" }}>
-          <div className="h-full w-3/4 rounded-full" style={{ background: "#a78bfa" }} />
+          <div className="h-full w-3/4 rounded-full" style={{ background: "#8b9cf4" }} />
         </div>
-        <span className="text-[10px] text-[#a78bfa]">Connecting…</span>
+        <span className="text-[10px] text-[#8b9cf4]">Connecting…</span>
       </div>
     </div>
   );
@@ -50,19 +50,19 @@ function AnalysisMockup() {
   ];
   return (
     <div className="rounded-xl p-5 font-mono text-xs border border-white/10" style={{ background: "#13112a" }}>
-      <p className="text-[10px] tracking-[0.16em] text-[#a78bfa] uppercase mb-3">Scanning files</p>
+      <p className="text-[10px] tracking-[0.16em] text-[#8b9cf4] uppercase mb-3">Scanning files</p>
       <div className="space-y-2">
         {files.map((f) => (
           <div key={f.name} className="flex items-center gap-2">
-            <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${f.done ? "bg-[#a78bfa]" : "bg-white/20"}`} />
+            <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${f.done ? "bg-[#8b9cf4]" : "bg-white/20"}`} />
             <span className="flex-1 text-white/50">{f.name}</span>
-            {f.done ? <span className="text-[#a78bfa]">✓</span> : <span className="text-white/30">…</span>}
+            {f.done ? <span className="text-[#8b9cf4]">✓</span> : <span className="text-white/30">…</span>}
           </div>
         ))}
       </div>
       <div className="border-t border-white/10 mt-3 pt-3 flex justify-between text-white/30">
         <span>Dependencies mapped</span>
-        <span className="text-[#a78bfa] font-medium">48</span>
+        <span className="text-[#8b9cf4] font-medium">48</span>
       </div>
     </div>
   );
@@ -71,21 +71,21 @@ function AnalysisMockup() {
 function GraphMockup() {
   return (
     <div className="rounded-xl p-5 border border-white/10" style={{ background: "#13112a" }}>
-      <p className="text-[10px] tracking-[0.16em] text-[#a78bfa] uppercase mb-3 font-mono">Dependency graph</p>
+      <p className="text-[10px] tracking-[0.16em] text-[#8b9cf4] uppercase mb-3 font-mono">Dependency graph</p>
       <svg viewBox="0 0 280 110" className="w-full block">
-        <line x1="140" y1="55" x2="75" y2="28" stroke="rgba(167,139,250,0.4)" strokeWidth="1" strokeDasharray="4 3" />
-        <line x1="140" y1="55" x2="205" y2="28" stroke="rgba(167,139,250,0.4)" strokeWidth="1" strokeDasharray="4 3" />
-        <line x1="140" y1="55" x2="75" y2="85" stroke="rgba(167,139,250,0.2)" strokeWidth="1" strokeDasharray="4 3" />
-        <line x1="140" y1="55" x2="205" y2="85" stroke="rgba(167,139,250,0.2)" strokeWidth="1" strokeDasharray="4 3" />
-        <line x1="75" y1="28" x2="28" y2="14" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-        <line x1="205" y1="28" x2="252" y2="14" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-        <circle cx="140" cy="55" r="10" fill="#7c3aed" />
-        <circle cx="75" cy="28" r="7" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" strokeWidth="1" />
-        <circle cx="205" cy="28" r="7" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" strokeWidth="1" />
-        <circle cx="75" cy="85" r="6" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.3)" strokeWidth="1" />
-        <circle cx="205" cy="85" r="6" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.3)" strokeWidth="1" />
-        <circle cx="28" cy="14" r="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-        <circle cx="252" cy="14" r="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+        <line x1="140" y1="55" x2="75" y2="28" stroke="rgba(139,156,244,0.4)" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="140" y1="55" x2="205" y2="28" stroke="rgba(139,156,244,0.4)" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="140" y1="55" x2="75" y2="85" stroke="rgba(139,156,244,0.2)" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="140" y1="55" x2="205" y2="85" stroke="rgba(139,156,244,0.2)" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="75" y1="28" x2="28" y2="14" stroke="#1a1830" strokeWidth="0.5" />
+        <line x1="205" y1="28" x2="252" y2="14" stroke="#1a1830" strokeWidth="0.5" />
+        <circle cx="140" cy="55" r="10" fill="#4f63e7" />
+        <circle cx="75" cy="28" r="7" fill="rgba(139,156,244,0.15)" stroke="#8b9cf4" strokeWidth="1" />
+        <circle cx="205" cy="28" r="7" fill="rgba(139,156,244,0.15)" stroke="#8b9cf4" strokeWidth="1" />
+        <circle cx="75" cy="85" r="6" fill="rgba(139,156,244,0.08)" stroke="rgba(139,156,244,0.3)" strokeWidth="1" />
+        <circle cx="205" cy="85" r="6" fill="rgba(139,156,244,0.08)" stroke="rgba(139,156,244,0.3)" strokeWidth="1" />
+        <circle cx="28" cy="14" r="4" fill="#111023" stroke="#1a1830" strokeWidth="0.5" />
+        <circle cx="252" cy="14" r="4" fill="#111023" stroke="#1a1830" strokeWidth="0.5" />
       </svg>
     </div>
   );
@@ -95,7 +95,7 @@ function ExplanationMockup() {
   return (
     <div className="rounded-xl p-5 text-xs border border-white/10" style={{ background: "#13112a" }}>
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#a78bfa]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#8b9cf4]" />
         <span className="text-white/40 font-mono">parser.ts</span>
       </div>
       <p className="text-white/50 leading-relaxed mb-3">
@@ -103,7 +103,7 @@ function ExplanationMockup() {
       </p>
       <div className="flex flex-wrap gap-1">
         {["reads AST", "emits graph", "no side effects"].map((t) => (
-          <span key={t} className="px-2 py-0.5 rounded border border-purple-500/20 text-[#a78bfa] bg-purple-500/10 text-[10px]">{t}</span>
+          <span key={t} className="px-2 py-0.5 rounded border border-purple-500/20 text-[#8b9cf4] bg-purple-500/10 text-[10px]">{t}</span>
         ))}
       </div>
     </div>
@@ -205,7 +205,7 @@ export default function HowItWorks() {
           </p>
           <h1 className="text-3xl md:text-4xl font-medium leading-[1.1] tracking-tight text-white">
             From repo to{" "}
-            <span style={{ color: "#a78bfa" }}>clarity</span>
+            <span style={{ color: "#8b9cf4" }}>clarity</span>
             <br />in seconds.
           </h1>
         </div>
@@ -232,12 +232,12 @@ export default function HowItWorks() {
             onClick={() => setActive(i)}
             className={`relative p-5 text-left border-r border-white/10 last:border-r-0 ${active === i ? "bg-white text-gray-900" : "hover:bg-white/5 transition-colors duration-150"}`}
           >
-            {active === i && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#a78bfa]" />}
+            {active === i && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8b9cf4]" />}
             <div className="flex items-start justify-between mb-6">
-              <span className={`text-xs font-medium tracking-wider ${active === i ? "text-[#7c3aed]" : "text-white/30"}`}>
+              <span className={`text-xs font-medium tracking-wider ${active === i ? "text-[#4f63e7]" : "text-white/30"}`}>
                 {step.number}
               </span>
-              <span className={`p-1.5 rounded-lg border transition-colors ${active === i ? "border-purple-200 text-[#7c3aed] bg-purple-50" : "border-white/10 text-white/30"}`}>
+              <span className={`p-1.5 rounded-lg border transition-colors ${active === i ? "border-purple-200 text-[#4f63e7] bg-purple-50" : "border-white/10 text-white/30"}`}>
                 {step.icon}
               </span>
             </div>
@@ -251,10 +251,10 @@ export default function HowItWorks() {
       <div className="grid md:grid-cols-2 gap-10 px-8 py-10 items-center border-b border-white/10">
         <div>{s.mockup}</div>
         <div className="space-y-4">
-          <p className="text-[11px] tracking-[0.18em] text-[#a78bfa] font-mono">{s.detailLabel}</p>
+          <p className="text-[11px] tracking-[0.18em] text-[#8b9cf4] font-mono">{s.detailLabel}</p>
           <h2 className="text-xl md:text-2xl font-medium leading-tight text-white">{s.detailHeading}</h2>
           <p className="text-sm text-white/50 leading-relaxed">{s.detailBody}</p>
-          <span className="inline-flex items-center px-3 py-1 rounded-md bg-purple-500/10 border border-purple-500/20 text-[#a78bfa] text-xs font-medium">
+          <span className="inline-flex items-center px-3 py-1 rounded-md bg-purple-500/10 border border-purple-500/20 text-[#8b9cf4] text-xs font-medium">
             {s.badge}
           </span>
           <div className="flex gap-1.5 pt-1">
@@ -262,7 +262,7 @@ export default function HowItWorks() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`h-1 rounded-full transition-all duration-300 ${active === i ? "w-5 bg-[#a78bfa]" : "w-1.5 bg-white/15 hover:bg-white/25"}`}
+                className={`h-1 rounded-full transition-all duration-300 ${active === i ? "w-5 bg-[#8b9cf4]" : "w-1.5 bg-white/15 hover:bg-white/25"}`}
               />
             ))}
           </div>
@@ -284,7 +284,7 @@ export default function HowItWorks() {
       {/* Stats */}
       <div className="flex flex-col sm:flex-row items-center gap-3 px-8 py-6">
         <div className="flex-1 flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 w-full" style={{ background: "#13112a" }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b9cf4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
           </svg>

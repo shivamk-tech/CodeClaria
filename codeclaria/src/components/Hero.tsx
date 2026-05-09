@@ -14,12 +14,12 @@ export default function Hero() {
         className="inline-flex items-center gap-2 text-[12px] font-medium px-4 py-[6px] rounded-full mb-6"
         style={{
           color: "rgba(255,255,255,0.85)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          background: "rgba(255,255,255,0.07)",
+          border: "1px solid #1f1d35",
+          background: "#141328",
           backdropFilter: "blur(8px)",
         }}
       >
-        <span style={{ color: "#a78bfa" }}>✦</span>
+        <span style={{ color: "rgba(255,255,255,0.5)" }}>✦</span>
         GPT-4o powered code intelligence
       </div>
 
@@ -29,18 +29,20 @@ export default function Hero() {
       >
         Explain Any Codebase.
         <br />
-        <span style={{ color: "#c4b5fd", textShadow: "0 0 40px rgba(167,139,250,0.5)" }}>Like You Wrote It.</span>
+        <span style={{ color: "#e2e8f0", textShadow: "none" }}>Like You Wrote It.</span>
       </h1>
 
       <div className="flex items-center gap-3">
-        <Button onClick={()=>{router.push('/analyze')}} className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-3 rounded-lg cursor-pointer">
+        <Button onClick={()=>{router.push('/analyze')}} className="bg-white text-[#07061a] hover:bg-white/90 text-[14px] font-semibold px-6 py-2.5 rounded-lg cursor-pointer">
             Analyze a repo
         </Button>
-        <ButtonOutline
+        <button
           onClick={() => document.querySelector('#how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-          className="text-[14px] font-medium px-6 py-3 rounded-lg border-white/20 bg-transparent text-white/65 hover:bg-white/5 hover:text-white cursor-pointer">
-            See how it works
-        </ButtonOutline>
+          className="text-[14px] font-medium px-6 py-2.5 rounded-lg cursor-pointer transition-all hover:bg-white/5 hover:text-white"
+          style={{ background: "transparent", color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.2)" }}
+        >
+          See how it works
+        </button>
       </div>
     </div>
   );

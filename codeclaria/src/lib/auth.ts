@@ -38,20 +38,12 @@ const authOption: NextAuthOptions = {
         let existUser = await User.findOne({ githubId })
 
         if (!existUser) {
-          existUser = await User.create({
-            githubId,
-            name,
-            email,
-            image,
-            accessToken,
-          })
-          // create free subscription for new user
-          await ensureFreeSubscription(githubId)
+          existUser = await User.create({ githubId, name, email, image, accessToken })
         } else {
           await User.updateOne({ githubId }, { accessToken })
-          // create free subscription if missing (existing users)
-          await ensureFreeSubscription(githubId)
         }
+        // ensure free subscription exists for both new and existing users
+        await ensureFreeSubscription(githubId)
 
         return true
       }
