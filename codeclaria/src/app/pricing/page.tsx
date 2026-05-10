@@ -46,6 +46,7 @@ export default function PricingPage() {
         currency: order.currency,
         name: "CodeClaria",
         description: `${order.planName} Plan`,
+        image: "/icon.svg",
         order_id: order.order_id,
         prefill: { name: session.user?.name || "", email: session.user?.email || "" },
         theme: { color: "#8b9cf4" },

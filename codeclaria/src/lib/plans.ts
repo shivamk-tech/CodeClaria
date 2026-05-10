@@ -27,7 +27,7 @@ export const PLANS = {
   },
   pro: {
     name: 'Pro',
-    price: 299,
+    price: 10,
     duration: 30,
     badge: 'Intro Offer',
     limits: PLAN_LIMITS.pro,

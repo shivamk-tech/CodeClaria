@@ -185,6 +185,70 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* ── Quick Setup ── */}
+        {!loading && (() => {
+          const steps = [
+            {
+              id: "app",
+              label: "Install GitHub App",
+              desc: "Enable auto PR & commit reviews",
+              done: appInstalled,
+              action: () => window.open(`https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_SLUG || "codeclaria"}/installations/new`, "_blank"),
+              cta: "Install →",
+            },
+            {
+              id: "connect",
+              label: "Connect a repo",
+              desc: "Enable auto-review on a repository",
+              done: connectedRepos.length > 0 || repoSelection === "all",
+              action: () => {},
+              cta: "Scroll down ↓",
+            },
+            {
+              id: "analyze",
+              label: "Analyze your first repo",
+              desc: "Get AI insights on any codebase",
+              done: false,
+              action: () => router.push("/analyze"),
+              cta: "Analyze →",
+            },
+          ];
+          const allDone = steps.every(s => s.done);
+          if (allDone) return null;
+          return (
+            <div className="fade-up mb-8 rounded-xl p-5" style={{ background: "#0d0c1e", border: "1px solid #1a1830", animationDelay: "0.04s" }}>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-[14px] font-semibold text-white">Quick Setup</p>
+                  <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.35)" }}>{steps.filter(s => s.done).length} of {steps.length} completed</p>
+                </div>
+                <div className="flex gap-1">
+                  {steps.map(s => (
+                    <div key={s.id} className="h-1 w-8 rounded-full" style={{ background: s.done ? "#8b9cf4" : "#1f1d35" }} />
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {steps.map((s, i) => (
+                  <div key={s.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: s.done ? "rgba(139,156,244,0.05)" : "#111023", border: `1px solid ${s.done ? "rgba(139,156,244,0.15)" : "#1a1830"}` }}>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5"
+                      style={{ background: s.done ? "rgba(139,156,244,0.15)" : "#1f1d35", color: s.done ? "#8b9cf4" : "rgba(255,255,255,0.3)", border: `1px solid ${s.done ? "rgba(139,156,244,0.3)" : "#2a2840"}` }}>
+                      {s.done ? "✓" : i + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] font-medium" style={{ color: s.done ? "rgba(255,255,255,0.5)" : "#fff" }}>{s.label}</p>
+                      <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.25)" }}>{s.desc}</p>
+                      {!s.done && (
+                        <button onClick={s.action} className="mt-2 text-[11px] font-semibold" style={{ color: "#8b9cf4" }}>{s.cta}</button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* ── Stats row ── */}
         {!loading && repos.length > 0 && (
           <div className="fade-up grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8" style={{ animationDelay: "0.05s" }}>
@@ -305,8 +369,8 @@ export default function DashboardPage() {
                     </svg>
                     <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.25)" }}>{repo.stargazers_count}</span>
                   </div>
-                  <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>
-                    {new Date(repo.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                  <span className="text-[11px] ml-auto" style={{ color: "rgba(255,255,255,0.2)" }}>
+                    {typeof window !== 'undefined' ? new Date(repo.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ''}
                   </span>
                   {/* connect toggle */}
                   <button

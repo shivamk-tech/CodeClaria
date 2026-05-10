@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { getServerSession } from "next-auth";
 import authOption from "@/lib/auth";
-import { PLANS } from "@/model/subscription.model";
+import { PLANS } from "@/lib/plans";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,

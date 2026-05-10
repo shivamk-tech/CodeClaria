@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Link, Brain, GitPullRequest, GitCommit, Network, MessageCircle, Github } from "lucide-react";
+import { Link, Brain, GitPullRequest, GitCommit, Network, MessageCircle, GitBranch } from "lucide-react";
 
 const FEATURES = [
   { id: "analyze", label: "Analyze Repo", icon: <Link size={14} /> },
@@ -11,7 +11,7 @@ const FEATURES = [
   { id: "commit", label: "Commit Review", icon: <GitCommit size={14} /> },
   { id: "graph", label: "Dep Graph", icon: <Network size={14} /> },
   { id: "chat", label: "Chat", icon: <MessageCircle size={14} /> },
-  { id: "auth", label: "GitHub App", icon: <Github size={14} /> },
+  { id: "auth", label: "GitHub App", icon: <GitBranch size={14} /> },
 ];
 
 function AnalyzeDemo() {

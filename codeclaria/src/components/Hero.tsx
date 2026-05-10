@@ -38,7 +38,7 @@ export default function Hero() {
         </Button>
         <button
           onClick={() => document.querySelector('#how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-          className="text-[14px] font-medium px-6 py-2.5 rounded-lg cursor-pointer transition-all hover:bg-white/5 hover:text-white"
+          className="text-[14px] font-medium px-6 py-[9px] rounded-lg cursor-pointer transition-all hover:bg-white/5 hover:text-white"
           style={{ background: "transparent", color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.2)" }}
         >
           See how it works
