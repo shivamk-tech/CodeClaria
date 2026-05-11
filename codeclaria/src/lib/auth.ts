@@ -43,7 +43,7 @@ const authOption: NextAuthOptions = {
           await User.updateOne({ githubId }, { accessToken })
         }
         // ensure free subscription exists for both new and existing users
-        await ensureFreeSubscription(githubId)
+        if (githubId) await ensureFreeSubscription(githubId)
 
         return true
       }

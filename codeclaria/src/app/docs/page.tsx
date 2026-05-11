@@ -241,7 +241,7 @@ function ThreeOrb() {
 
 // ─── Doc Sections Content ─────────────────────────────────────────────────────
 
-type SectionDef = { toc: string[]; content: () => JSX.Element };
+type SectionDef = { toc: string[]; content: () => React.ReactElement };
 
 const SECTIONS: Record<SectionId, SectionDef> = {
   introduction: {

@@ -49,8 +49,8 @@ export default function DependencyGraph({ files, dependencies }: Props) {
   const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
   useEffect(() => {
-    if (!files?.length || activeTab !== "graph") return;
-    const svg = d3.select(svgRef.current);
+    if (!files?.length || activeTab !== "graph" || !svgRef.current) return;
+    const svg = d3.select(svgRef.current as SVGSVGElement);
     svg.selectAll("*").remove();
 
     const container = svgRef.current!.parentElement!;
@@ -144,7 +144,7 @@ export default function DependencyGraph({ files, dependencies }: Props) {
       });
 
     // node groups
-    const node = g.append("g").selectAll("g")
+    const node = g.append("g").selectAll<SVGGElement, GraphNode>("g")
       .data(nodes).join("g")
       .attr("cursor", "pointer")
       .call(
