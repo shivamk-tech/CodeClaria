@@ -12,6 +12,8 @@ function extractReferencedFiles(answer: string, files: RepoFile[]): string[] {
       referenced.push(file.path);
     }
   }
+
+  
   return [...new Set(referenced)];
 }
 
