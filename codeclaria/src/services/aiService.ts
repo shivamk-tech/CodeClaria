@@ -13,7 +13,6 @@ function extractReferencedFiles(answer: string, files: RepoFile[]): string[] {
     }
   }
 
-  
   return [...new Set(referenced)];
 }
 
