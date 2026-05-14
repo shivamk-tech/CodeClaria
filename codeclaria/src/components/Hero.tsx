@@ -27,7 +27,7 @@ export default function Hero() {
         className="font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
         style={{ fontSize: "clamp(28px, 4vw, 56px)" }}
       >
-        Explain Any Codebase.
+        Explain Any Codebase
         <br />
         <span style={{ color: "#e2e8f0", textShadow: "none" }}>Like You Wrote It.</span>
       </h1>
